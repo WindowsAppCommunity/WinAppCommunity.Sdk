@@ -1,4 +1,4 @@
-# OwlCore.Template [![Version](https://img.shields.io/nuget/v/OwlCore.Template.svg)](https://www.nuget.org/packages/OwlCore.Template)
+# WinAppCommunity.Sdk [![Version](https://img.shields.io/nuget/v/WinAppCommunity.Sdk.svg)](https://www.nuget.org/packages/WinAppCommunity.Sdk)
 
 Description goes here.
 
@@ -13,13 +13,13 @@ Extended description goes here. Tell people why they should use your module, how
 
 ## Install
 
-Published releases are available on [NuGet](https://www.nuget.org/packages/OwlCore.Template). To install, run the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console).
+Published releases are available on [NuGet](https://www.nuget.org/packages/WinAppCommunity.Sdk). To install, run the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console).
 
-    PM> Install-Package OwlCore.Template
+    PM> Install-Package WinAppCommunity.Sdk
     
 Or using [dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet)
 
-    > dotnet add package OwlCore.Template
+    > dotnet add package WinAppCommunity.Sdk
 
 ## Usage
 
