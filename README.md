@@ -37,4 +37,4 @@ Version numbering follows the Semantic versioning approach. However, if the majo
 
 ## License
 
-All OwlCore code is licensed under the MIT License. OwlCore is licensed under the MIT License. See the [LICENSE](./src/LICENSE.txt) file for more details.
+This code is licensed under the MIT License. See the [LICENSE](./src/LICENSE.txt) file for more details.
