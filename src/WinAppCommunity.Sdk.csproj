@@ -19,7 +19,7 @@
 		<Description></Description>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageIcon>logo.png</PackageIcon>
-		<PackageProjectUrl>https://github.com/Arlodotexe/WinAppCommunity.Sdk</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/UWPCommunity/WinAppCommunity.Sdk</PackageProjectUrl>
 		<PackageReleaseNotes>
 --- 0.0.0 ---
 [New]
