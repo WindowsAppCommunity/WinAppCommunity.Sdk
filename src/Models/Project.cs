@@ -13,7 +13,7 @@ public record Project
     /// Creates a new instance of <see cref="Project"/>.
     /// </summary>
     [JsonConstructor]
-    public Project(Cid publisher, string name, string description, Cid icon, Cid heroImage, Cid[] images, string[] features, string? accentColor, string category, DateTime createdAtUnixTime, Cid[] dependencies, Collaborator[] collaborators, Link[] links, bool? forgetMe, bool isPrivate)
+    public Project(Cid publisher, string name, string description, Cid icon, Cid heroImage, Cid[] images, string[] features, string? accentColor, string category, DateTime createdAt, Cid[] dependencies, Collaborator[] collaborators, Link[] links, bool? forgetMe, bool isPrivate)
     {
         Publisher = publisher;
         Name = name;
@@ -24,7 +24,7 @@ public record Project
         Features = features;
         AccentColor = accentColor;
         Category = category;
-        CreatedAtUnixTime = createdAtUnixTime;
+        CreatedAt = createdAt;
         Dependencies = dependencies;
         Collaborators = collaborators;
         Links = links;
@@ -80,7 +80,7 @@ public record Project
     /// <summary>
     /// The time this project was created.
     /// </summary>
-    public DateTime CreatedAtUnixTime { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     /// <summary>
     /// Other projects which depend on this project.

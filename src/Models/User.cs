@@ -1,7 +1,16 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Ipfs;
 
 namespace WinAppCommunity.Sdk.Models;
+
+/// <summary>
+/// Represents a single managed user. 
+/// </summary>
+/// <param name="user"></param>
+/// <param name="ipnsCid"></param>
+public record ManagedUserMap(User user, Cid ipnsCid);
 
 /// <summary>
 /// Represents a single user.
@@ -21,6 +30,21 @@ public record User
         Projects = projects;
         Publishers = publishers;
         ForgetMe = forgetMe;
+    }
+
+
+    /// <summary>
+    /// Creates a new instance of <see cref="User"/>.
+    /// </summary>
+    public User(string? name, IEnumerable<ApplicationConnection> connections)
+    {
+        Name = name;
+        MarkdownAboutMe = string.Empty;
+        Connections = connections.ToArray();
+        Links = new Link[] { };
+        Projects = new Cid[] { };
+        Publishers = new Cid[] { };
+        ForgetMe = null;
     }
 
     /// <summary>
