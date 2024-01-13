@@ -1,21 +1,25 @@
+using Newtonsoft.Json;
+using WinAppCommunity.Sdk.Models.JsonConverters;
+
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
 /// Represents an application connection.
 /// </summary>
-/// <param name="connectionName">The name of the connection.</param>
-public abstract record ApplicationConnection(string connectionName);
+/// <param name="ConnectionName">The name of the connection.</param>
+[JsonConverter(typeof(ApplicationConnectionJsonConverter))]
+public abstract record ApplicationConnection(string ConnectionName);
 
 /// <summary>
 /// Represents an application connection to Discord.
 /// </summary>
-/// <param name="discordId"></param>
-/// <param name="connectionName">The name of the connection.</param>
-public record DiscordConnection(string discordId, string connectionName = "discord") : ApplicationConnection(connectionName);
+/// <param name="DiscordId"></param>
+/// <param name="ConnectionName">The name of the connection.</param>
+public record DiscordConnection(string DiscordId, string ConnectionName = "discord") : ApplicationConnection(ConnectionName);
 
 /// <summary>
 /// Represents an application connection to an Email address.
 /// </summary>
-/// <param name="email">An email address.</param>
-/// <param name="connectionName">The name of the connection.</param>
-public record EmailConnection(string email, string connectionName = "email") : ApplicationConnection(connectionName);
+/// <param name="Email">An email address.</param>
+/// <param name="ConnectionName">The name of the connection.</param>
+public record EmailConnection(string Email, string ConnectionName = "email") : ApplicationConnection(ConnectionName);
