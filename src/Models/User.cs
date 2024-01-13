@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -15,6 +16,7 @@ public record ManagedUserMap(User user, Cid ipnsCid);
 /// <summary>
 /// Represents a single user.
 /// </summary>
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 public record User
 {
     /// <summary>
@@ -32,15 +34,29 @@ public record User
         ForgetMe = forgetMe;
     }
 
+    /// <summary>
+    /// Creates a new instance of <see cref="User"/>.
+    /// </summary>
+    public User()
+    {
+        // Initialize properties with default values
+        Name = null;
+        MarkdownAboutMe = string.Empty;
+        Connections = Array.Empty<ApplicationConnection>();
+        Links = Array.Empty<Link>();
+        Projects = Array.Empty<Cid>();
+        Publishers = Array.Empty<Cid>();
+        ForgetMe = null;
+    }
 
     /// <summary>
     /// Creates a new instance of <see cref="User"/>.
     /// </summary>
-    public User(string? name, IEnumerable<ApplicationConnection> connections)
+    public User(string? name, ApplicationConnection[] connections)
     {
         Name = name;
         MarkdownAboutMe = string.Empty;
-        Connections = connections.ToArray();
+        Connections = connections;
         Links = new Link[] { };
         Projects = new Cid[] { };
         Publishers = new Cid[] { };
