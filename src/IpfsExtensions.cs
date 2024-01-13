@@ -19,7 +19,7 @@ public static class IpfsExtensions
     /// <returns>The deserialized DAG content, if any.</returns>
     public static async Task<TResult> ResolveIpnsDagAsync<TResult>(this Cid ipnsCid, IpfsClient client, CancellationToken cancellationToken)
     {
-        var ipnsResResult = await client.Name.ResolveAsync($"/ipns/{ipnsCid}", recursive: true, cancel: cancellationToken);
+        var ipnsResResult = await client.Name.ResolveAsync($"/ipns/{ipnsCid.Hash}", recursive: true, cancel: cancellationToken);
 
         var resolvedCid = Cid.Decode(ipnsResResult.Replace("/ipfs/", ""));
         var projectRes = await client.Dag.GetAsync<TResult>(resolvedCid, cancellationToken);
