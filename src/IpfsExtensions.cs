@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs.CoreApi;
 
 namespace WinAppCommunity.Sdk;
 
@@ -44,4 +45,21 @@ public static class IpfsExtensions
         => cids
             .ToAsyncEnumerable()
             .SelectAwaitWithCancellation(async (cid, cancel) => await cid.ResolveIpnsDagAsync<TResult>(client, CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancel).Token));
+
+    /// <summary>
+    /// Creates an ipns key using a temporary name, then renames it to match the Id of the key.
+    /// </summary>
+    /// <remarks>
+    /// Enables pushing to ipns without additional calls to convert ipns cid to name.
+    /// </remarks>
+    /// <param name="keyApi">The key api to use for accessing ipfs keys.</param>
+    /// <param name="size">The size of the key to create.</param>
+    /// <returns>A task containing the created key.</returns>
+    public static async Task<IKey> CreateKeyWithNameOfIdAsync(this IKeyApi keyApi, int size = 4096)
+    {
+        var key = await keyApi.CreateAsync(name: "temp", "ed25519", size);
+
+        // Rename key name to the key id
+        return await keyApi.RenameAsync("temp", $"{key.Id}");
+    }
 }
