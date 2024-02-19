@@ -107,7 +107,3 @@ public record Project
     /// </summary>
     public bool IsPrivate { get; set; }
 }
-
-// User: Draft a list of cli commands for modifying a project
-// gpt4:
-// 
