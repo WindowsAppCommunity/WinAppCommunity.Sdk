@@ -12,7 +12,7 @@ public record Publisher
     /// Creates a new instance of <see cref="Publisher"/>.
     /// </summary>
     [JsonConstructor]
-    public Publisher(string name, string description, string icon, string? accentColor, Link[] links, EmailConnection contactEmail, Cid[] projects, bool isPrivate)
+    public Publisher(string name, string description, Cid icon, string? accentColor, Link[] links, Cid[] projects, EmailConnection? contactEmail = null)
     {
         Name = name;
         Description = description;
@@ -21,7 +21,6 @@ public record Publisher
         Links = links;
         ContactEmail = contactEmail;
         Projects = projects;
-        IsPrivate = isPrivate;
     }
 
     /// <summary>
@@ -37,7 +36,7 @@ public record Publisher
     /// <summary>
     /// An icon to represent this publisher.
     /// </summary>
-    public string Icon { get; set; }
+    public Cid Icon { get; set; }
 
     /// <summary>
     /// An hex-encoded accent color for this publisher.
@@ -52,7 +51,7 @@ public record Publisher
     /// <summary>
     /// An <see cref="EmailConnection"/> that can be used to contact this publisher. 
     /// </summary>
-    public EmailConnection ContactEmail { get; set; }
+    public EmailConnection? ContactEmail { get; set; }
 
     /// <summary>
     /// A list of the projects published by this publisher.
