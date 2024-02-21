@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Ipfs;
 using System.Text.Json.Serialization;
 
@@ -12,15 +13,13 @@ public record Publisher
     /// Creates a new instance of <see cref="Publisher"/>.
     /// </summary>
     [JsonConstructor]
-    public Publisher(string name, string description, Cid icon, string? accentColor, Link[] links, Cid[] projects, EmailConnection? contactEmail = null)
+    public Publisher(string name, string description, Cid icon, string? accentColor, EmailConnection? contactEmail = null)
     {
         Name = name;
         Description = description;
         Icon = icon;
         AccentColor = accentColor;
-        Links = links;
         ContactEmail = contactEmail;
-        Projects = projects;
     }
 
     /// <summary>
@@ -39,24 +38,24 @@ public record Publisher
     public Cid Icon { get; set; }
 
     /// <summary>
-    /// An hex-encoded accent color for this publisher.
+    /// A hex-encoded accent color for this publisher.
     /// </summary>
     public string? AccentColor { get; set; }
 
     /// <summary>
     /// Represents links to external profiles or resources added by the publisher.
     /// </summary>
-    public Link[] Links { get; set; }
+    public Link[] Links { get; set; } = [];
 
     /// <summary>
-    /// An <see cref="EmailConnection"/> that can be used to contact this publisher. 
+    /// A <see cref="EmailConnection"/> that can be used to contact this publisher. 
     /// </summary>
     public EmailConnection? ContactEmail { get; set; }
 
     /// <summary>
     /// A list of the projects published by this publisher.
     /// </summary>
-    public Cid[] Projects { get; set; }
+    public Cid[] Projects { get; set; } = [];
 
     /// <summary>
     /// A flag indicating whether this is a non-public project.

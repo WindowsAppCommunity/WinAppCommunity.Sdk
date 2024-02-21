@@ -13,7 +13,7 @@ public record Project
     /// Creates a new instance of <see cref="Project"/>.
     /// </summary>
     [JsonConstructor]
-    public Project(Cid publisher, string name, string description, Cid icon, Cid heroImage, Cid[] images, string[] features, string? accentColor, string category, DateTime createdAt, Cid[] dependencies, Collaborator[] collaborators, Link[] links, bool? forgetMe, bool isPrivate)
+    public Project(Cid publisher, string name, string description, Cid icon, Cid heroImage, Cid[] images, string[] features, string? accentColor, string category, DateTime createdAt, Cid[] dependencies, bool? forgetMe, bool isPrivate)
     {
         Publisher = publisher;
         Name = name;
@@ -26,8 +26,6 @@ public record Project
         Category = category;
         CreatedAt = createdAt;
         Dependencies = dependencies;
-        Collaborators = collaborators;
-        Links = links;
         ForgetMe = forgetMe;
         IsPrivate = isPrivate;
     }
@@ -68,7 +66,7 @@ public record Project
     public string[] Features { get; set; }
 
     /// <summary>
-    /// An hex-encoded accent color for this publisher.
+    /// A hex-encoded accent color for this publisher.
     /// </summary>
     public string? AccentColor { get; set; }
 
@@ -83,19 +81,24 @@ public record Project
     public DateTime CreatedAt { get; set; }
 
     /// <summary>
-    /// Other projects which depend on this project.
+    /// Other projects which this project may depend on.
     /// </summary>
-    public Cid[] Dependencies { get; set; }
+    public Cid[] Dependencies { get; set; } = [];
 
     /// <summary>
     /// The <see cref="User"/>s who collaborate on this project, and their corresponding roles.
     /// </summary>
-    public Collaborator[] Collaborators { get; set; }
+    public Collaborator[] Collaborators { get; set; } = [];
 
     /// <summary>
     /// Represents links to external profiles or resources added by the user.
     /// </summary>
-    public Link[] Links { get; set; }
+    public Link[] Links { get; set; } = [];
+
+    /// <summary>
+    /// Holds information about project assets that have been published for consumption by an end user, such as a Microsoft Store app, a package on nuget.org, a git repo, etc.
+    /// </summary>
+    public ApplicationConnection[] PublishedProjectConnections { get; set; } = [];
 
     /// <summary>
     /// A flag that indicates whether the profile has requested to be forgotten.
