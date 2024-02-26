@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using CommunityToolkit.Diagnostics;
 
 namespace WinAppCommunity.Sdk.Models.JsonConverters;
@@ -20,6 +19,9 @@ public class ApplicationConnectionJsonConverter : JsonConverter<ApplicationConne
     /// <inheritdoc/>
     public override ApplicationConnection? ReadJson(JsonReader reader, Type objectType, ApplicationConnection? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
+        if (reader.Value is null)
+            return null;
+
         JObject jsonObject = JObject.Load(reader);
         var connectionName = jsonObject["connectionName"]?.Value<string>();
 
@@ -34,7 +36,8 @@ public class ApplicationConnectionJsonConverter : JsonConverter<ApplicationConne
         if (connectionName == "email")
         {
             var email = jsonObject["email"]?.Value<string>();
-            Guard.IsNotNull(email);
+            if (email is null)
+                return null;
 
             return new EmailConnection(email, connectionName);
         }

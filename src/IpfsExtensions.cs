@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Diagnostics;
 using Ipfs;
+using Ipfs.CoreApi;
 using Ipfs.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ipfs.CoreApi;
 
 namespace WinAppCommunity.Sdk;
 
@@ -18,19 +18,19 @@ public static class IpfsExtensions
     /// <param name="client">A client that can be used to communicate with Ipfs.</param>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing task.</param>
     /// <returns>The deserialized DAG content, if any.</returns>
-    public static async Task<TResult> ResolveIpnsDagAsync<TResult>(this Cid cid, IpfsClient client, CancellationToken cancellationToken)
+    public static async Task<(TResult? Result, Cid ResultCid)> ResolveIpnsDagAsync<TResult>(this Cid cid, IpfsClient client, CancellationToken cancellationToken)
     {
         if (cid.ContentType == "libp2p-key")
         {
-            var ipnsResResult = await client.Name.ResolveAsync($"/ipns/{cid}", recursive: true, cancel: cancellationToken);
+            var ipnsResResult = await client.Name.ResolveAsync($"/ipns/{cid}", recursive: true, nocache: true, cancel: cancellationToken);
 
             cid = Cid.Decode(ipnsResResult.Replace("/ipfs/", ""));
         }
 
-        var projectRes = await client.Dag.GetAsync<TResult>(cid, cancellationToken);
+        var res = await client.Dag.GetAsync<TResult>(cid, cancellationToken);
 
-        Guard.IsNotNull(projectRes);
-        return projectRes;
+        Guard.IsNotNull(res);
+        return (res, cid);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public static class IpfsExtensions
     /// <param name="client">A client that can be used to communicate with Ipfs.</param>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing task.</param>
     /// <returns>An async enumerable that yields the requested data.</returns>
-    public static IAsyncEnumerable<TResult> ResolveIpnsDagAsync<TResult>(this IEnumerable<Cid> cids, IpfsClient client, CancellationToken cancellationToken)
+    public static IAsyncEnumerable<(TResult? Result, Cid ResultCid)> ResolveIpnsDagAsync<TResult>(this IEnumerable<Cid> cids, IpfsClient client, CancellationToken cancellationToken)
         => cids
             .ToAsyncEnumerable()
             .SelectAwaitWithCancellation(async (cid, cancel) => await cid.ResolveIpnsDagAsync<TResult>(client, CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancel).Token));
