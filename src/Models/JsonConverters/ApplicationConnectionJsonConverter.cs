@@ -1,33 +1,50 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using CommunityToolkit.Diagnostics;
+using OwlCore.Extensions;
 
 namespace WinAppCommunity.Sdk.Models.JsonConverters;
 
-/// <summary>
-/// A custom json convert for discriminating the various types of <see cref="ApplicationConnection"/>.
-/// </summary>
-public class ApplicationConnectionJsonConverter : JsonConverter<ApplicationConnection>
+internal static class ApplicationConnectionSerializationHelpers
 {
-    /// <inheritdoc/>
-    public override bool CanRead => true;
-
-    /// <inheritdoc/>
-    public override bool CanWrite => true;
-
-    /// <inheritdoc/>
-    public override ApplicationConnection? ReadJson(JsonReader reader, Type objectType, ApplicationConnection? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    internal static JObject? WriteConnection(ApplicationConnection connection)
     {
-        if (reader.Value is null)
-            return null;
+        var jObject = new JObject();
 
-        JObject jsonObject = JObject.Load(reader);
-        var connectionName = jsonObject["connectionName"]?.Value<string>();
+        jObject.AddFirst(new JProperty("connectionName", new JValue(connection.ConnectionName)));
+
+        if (connection is DiscordConnection discordConnection)
+            jObject.AddFirst(new JProperty("discordId", new JValue(discordConnection.DiscordId)));
+
+        if (connection is EmailConnection emailConnection)
+            jObject.AddFirst(new JProperty("email", new JValue(emailConnection.Email)));
+
+        return jObject;
+    }
+
+    internal static object? ReadConnection(JToken token, JsonSerializer serializer)
+    {
+        if (token.Type == JTokenType.Array)
+        {
+            var jsonArray = (JArray)token;
+            return jsonArray.Select(jToken => ReadConnection(jToken, serializer)).PruneNull().FirstOrDefault();
+        }
+
+        if (token is JObject jObject)
+            return ReadConnection(jObject, serializer);
+
+        throw new NotSupportedException($"Token type {token.Type} is not supported.");
+    }
+
+    internal static ApplicationConnection? ReadConnection(JObject jObject, JsonSerializer serializer)
+    {
+        var connectionName = jObject["connectionName"]?.Value<string>();
 
         if (connectionName == "discord")
         {
-            var discordId = jsonObject["discordId"]?.Value<string>();
+            var discordId = jObject["discordId"]?.Value<string>();
             Guard.IsNotNull(discordId);
 
             return new DiscordConnection(discordId, connectionName);
@@ -35,7 +52,7 @@ public class ApplicationConnectionJsonConverter : JsonConverter<ApplicationConne
 
         if (connectionName == "email")
         {
-            var email = jsonObject["email"]?.Value<string>();
+            var email = jObject["email"]?.Value<string>();
             if (email is null)
                 return null;
 
@@ -44,24 +61,75 @@ public class ApplicationConnectionJsonConverter : JsonConverter<ApplicationConne
 
         return null;
     }
+}
+
+/// <summary>
+/// A custom json convert for discriminating the various types of <see cref="ApplicationConnection"/>.
+/// </summary>
+public class ApplicationConnectionJsonConverter : JsonConverter
+{
+    /// <inheritdoc />
+    public override bool CanConvert(Type objectType)
+    {
+        if (objectType == typeof(ApplicationConnection))
+            return true;
+
+        var arrayElement = objectType.GetElementType();
+        if (objectType.IsArray && arrayElement == typeof(ApplicationConnection))
+            return true;
+
+        return false;
+    }
 
     /// <inheritdoc/>
-    public override void WriteJson(JsonWriter writer, ApplicationConnection? value, JsonSerializer serializer)
+    public override bool CanRead => true;
+
+    /// <inheritdoc/>
+    public override bool CanWrite => true;
+
+    /// <inheritdoc/>
+    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    {
+        if (reader.Value is null)
+            return null;
+
+        if (reader.TokenType == JsonToken.Null)
+            return null;
+
+        var token = JToken.Load(reader);
+
+        return ApplicationConnectionSerializationHelpers.ReadConnection(token, serializer);
+    }
+
+    /// <inheritdoc/>
+    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
         if (value is null)
             return;
 
-        var o = new JObject();
-
         if (value is ApplicationConnection connection)
-            o.AddFirst(new JProperty("connectionName", new JValue(connection.ConnectionName)));
+        {
+            var jObject = ApplicationConnectionSerializationHelpers.WriteConnection(connection);
+            jObject?.WriteTo(writer);
+        }
+        else if (value is ApplicationConnection[] connections)
+        {
+            var jArray = new JArray();
+            foreach (var item in connections)
+            {
+                var jObject = ApplicationConnectionSerializationHelpers.WriteConnection(item);
 
-        if (value is DiscordConnection discordConnection)
-            o.AddFirst(new JProperty("discordId", new JValue(discordConnection.DiscordId)));
+                if (jObject is null)
+                    jArray.Add(JValue.CreateNull());
+                else
+                    jArray.Add(jObject);
+            }
 
-        if (value is EmailConnection emailConnection)
-            o.AddFirst(new JProperty("email", new JValue(emailConnection.Email)));
-
-        o.WriteTo(writer);
+            jArray.WriteTo(writer);
+        }
+        else
+        {
+            throw new NotSupportedException($"Value type {value.GetType()} is not supported.");
+        }
     }
 }
