@@ -90,15 +90,27 @@ public class ApplicationConnectionJsonConverter : JsonConverter
     /// <inheritdoc/>
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-        if (reader.Value is null)
-            return null;
-
         if (reader.TokenType == JsonToken.Null)
             return null;
 
-        var token = JToken.Load(reader);
+        if (reader.TokenType == JsonToken.PropertyName)
+        {
+            return reader.Value;
+        }
 
-        return ApplicationConnectionSerializationHelpers.ReadConnection(token, serializer);
+        if (reader.TokenType == JsonToken.StartObject)
+        {
+            var jobj = JObject.Load(reader);
+            return ApplicationConnectionSerializationHelpers.ReadConnection(jobj, serializer);
+        }
+
+        if (reader.TokenType == JsonToken.StartArray)
+        {
+            var jarray = JArray.Load(reader);
+            return ApplicationConnectionSerializationHelpers.ReadConnection(jarray, serializer);
+        }
+
+        throw new NotSupportedException($"Token type {reader.TokenType} is not supported.");
     }
 
     /// <inheritdoc/>
