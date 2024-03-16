@@ -1,6 +1,6 @@
 using Ipfs;
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace WinAppCommunity.Sdk.Models;
 
@@ -20,8 +20,8 @@ public record User : IName
     /// <summary>
     /// Creates a new instance of <see cref="User"/>.
     /// </summary>
-    [JsonConstructor]
-    public User(string? name, string markdownAboutMe, ApplicationConnection[] connections, Link[] links, Cid[] projects, Cid[] publishers, bool? forgetMe)
+    [Newtonsoft.Json.JsonConstructor]
+    public User(string name, string markdownAboutMe, ApplicationConnection[] connections, Link[] links, Cid[] projects, Cid[] publishers, bool? forgetMe)
     {
         Name = name;
         MarkdownAboutMe = markdownAboutMe;
@@ -38,7 +38,7 @@ public record User : IName
     public User()
     {
         // Initialize properties with default values
-        Name = null;
+        Name = string.Empty;
         MarkdownAboutMe = string.Empty;
         Connections = Array.Empty<ApplicationConnection>();
         Links = Array.Empty<Link>();
@@ -50,7 +50,7 @@ public record User : IName
     /// <summary>
     /// Creates a new instance of <see cref="User"/>.
     /// </summary>
-    public User(string? name, ApplicationConnection[] connections)
+    public User(string name, ApplicationConnection[] connections)
     {
         Name = name;
         MarkdownAboutMe = string.Empty;
@@ -64,12 +64,17 @@ public record User : IName
     /// <summary>
     /// The name of the user.
     /// </summary>
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// A summary of the user in markdown syntax.
     /// </summary>
     public string MarkdownAboutMe { get; set; }
+
+    /// <summary>
+    /// An icon to represent this user.
+    /// </summary>
+    public Cid Icon { get; set; }
 
     /// <summary>
     /// Represents application connections added by the user.
