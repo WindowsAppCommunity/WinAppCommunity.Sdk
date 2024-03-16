@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using Ipfs;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
 /// Represents publisher data.
 /// </summary>
-public record Publisher
+public record Publisher : IName
 {
     /// <summary>
     /// Creates a new instance of <see cref="Publisher"/>.

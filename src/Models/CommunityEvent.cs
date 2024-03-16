@@ -1,5 +1,5 @@
 using System;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Ipfs;
 
 namespace WinAppCommunity.Sdk.Models;
@@ -7,7 +7,7 @@ namespace WinAppCommunity.Sdk.Models;
 /// <summary>
 /// Represents a single entry in a community event.
 /// </summary>
-public record CommunityEvent
+public record CommunityEvent : IName
 {
     /// <summary>
     /// Creates a new instance of <see cref="CommunityEvent"/>.
@@ -23,7 +23,7 @@ public record CommunityEvent
     /// <summary>
     /// The name of this event.
     /// </summary>
-    public string Name { get; init; }
+    public string Name { get; set; }
 
     /// <summary>
     /// A list of <see cref="Cid"/>s pointing to <see cref="CommunityEventEntry"/> for this event.

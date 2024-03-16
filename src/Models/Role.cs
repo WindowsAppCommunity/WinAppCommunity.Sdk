@@ -1,11 +1,11 @@
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
 /// Represents the role of a user.
 /// </summary>
-public record Role
+public record Role : IName
 {
     /// <summary>
     /// Creates a new instance of <see cref="Role"/>.

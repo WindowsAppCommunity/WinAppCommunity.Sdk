@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
 using Ipfs;
+using System;
+using Newtonsoft.Json;
 
 namespace WinAppCommunity.Sdk.Models;
 
@@ -17,7 +15,7 @@ public record ManagedUserMap(User user, Cid ipnsCid);
 /// Represents a single user.
 /// </summary>
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-public record User
+public record User : IName
 {
     /// <summary>
     /// Creates a new instance of <see cref="User"/>.

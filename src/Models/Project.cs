@@ -1,13 +1,13 @@
 using Ipfs;
+using Newtonsoft.Json;
 using System;
-using System.Text.Json.Serialization;
 
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
 /// Represents project data.
 /// </summary>
-public record Project
+public record Project : IName
 {
     /// <summary>
     /// Creates a new instance of <see cref="Project"/>.

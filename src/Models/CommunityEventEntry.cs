@@ -1,6 +1,5 @@
-using System;
-using System.Text.Json.Serialization;
 using Ipfs;
+using Newtonsoft.Json;
 
 namespace WinAppCommunity.Sdk.Models;
 
