@@ -74,7 +74,7 @@ public record User : IName
     /// <summary>
     /// An icon to represent this user.
     /// </summary>
-    public Cid Icon { get; set; }
+    public Cid? Icon { get; set; }
 
     /// <summary>
     /// Represents application connections added by the user.
