@@ -48,12 +48,12 @@ public record Project : IName
     /// <summary>
     /// A <see cref="Cid"/> pointing to a small icon for this project.
     /// </summary>
-    public Cid Icon { get; set; }
+    public Cid? Icon { get; set; }
 
     /// <summary>
     /// A <see cref="Cid"/> pointing to a banner or hero image for this project.
     /// </summary>
-    public Cid HeroImage { get; set; }
+    public Cid? HeroImage { get; set; }
 
     /// <summary>
     /// A list of <see cref="Cid"/>s that point to images demonstrating this project.

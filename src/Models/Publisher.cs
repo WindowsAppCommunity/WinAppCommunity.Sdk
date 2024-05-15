@@ -65,7 +65,12 @@ public record Publisher : IName
     /// <summary>
     /// A list of other publishers who are managed under this publisher.
     /// </summary>
-    public Cid[] Subpublishers { get; set; } = [];
+    public Cid[] ParentPublishers { get; set; } = [];
+
+    /// <summary>
+    /// A list of other publishers who are managed under this publisher.
+    /// </summary>
+    public Cid[] ChildPublishers { get; set; } = [];
 
     /// <summary>
     /// A flag indicating whether this is a non-public project.

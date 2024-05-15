@@ -1,11 +1,13 @@
 using Ipfs;
 using Newtonsoft.Json;
+using WinAppCommunity.Sdk.Models.JsonConverters;
 
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
 /// Represents a single entry in a community event.
 /// </summary>
+[JsonConverter(typeof(ApplicationConnectionJsonConverter))]
 public record CommunityEventEntry
 {
     /// <summary>

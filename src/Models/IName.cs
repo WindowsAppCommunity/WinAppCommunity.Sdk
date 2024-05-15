@@ -8,5 +8,5 @@ public interface IName
     /// <summary>
     /// A name or label for this object.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; }
 }

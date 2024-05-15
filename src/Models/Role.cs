@@ -20,10 +20,27 @@ public record Role : IName
     /// <summary>
     /// The name of the role.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; }
 
     /// <summary>
     /// A description for the role.
     /// </summary>
-    public string Description { get; set; }
+    public string Description { get; }
+
+    /// <inheritdoc />
+    public virtual bool Equals(Role? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Name == other.Name && Description == other.Description;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            return (Name.GetHashCode() * 397) ^ Description.GetHashCode();
+        }
+    }
 }

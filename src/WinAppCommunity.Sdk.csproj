@@ -56,7 +56,8 @@ Initial release of WinAppCommunity.Sdk.
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-		<PackageReference Include="OwlCore.Kubo" Version="0.15.1" />
+		<PackageReference Include="OwlCore.Kubo" Version="0.16.0" />
+		<PackageReference Include="OwlCore.Nomad" Version="0.1.2" />
 		<PackageReference Include="PolySharp" Version="1.14.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -55,9 +55,9 @@ public record User : IName
         Name = name;
         MarkdownAboutMe = string.Empty;
         Connections = connections;
-        Links = new Link[] { };
-        Projects = new Cid[] { };
-        Publishers = new Cid[] { };
+        Links = [];
+        Projects = [];
+        Publishers = [];
         ForgetMe = null;
     }
 
