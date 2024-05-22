@@ -44,7 +44,7 @@ public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid
         foreach (var projectCid in Inner.Projects)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
             yield return new ReadOnlyProjectAppModel(ListeningEventStreamHandlers)
@@ -52,7 +52,7 @@ public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid
                 Client = Client,
                 Id = projectCid, // assuming project cid is ipns and won't change
                 Sources = Sources,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Inner = result,
             };
         }
@@ -67,7 +67,7 @@ public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid
         foreach (var publisherCid in Inner.ChildPublishers)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
             yield return new ReadOnlyPublisherAppModel(ListeningEventStreamHandlers)
@@ -75,7 +75,7 @@ public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid
                 Client = Client,
                 Id = publisherCid, // assuming publisher cid is ipns and won't change
                 Sources = Sources,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Inner = result,
             };
         }
@@ -90,7 +90,7 @@ public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid
         foreach (var publisherCid in Inner.ParentPublishers)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
             yield return new ReadOnlyPublisherAppModel(ListeningEventStreamHandlers)
@@ -98,7 +98,7 @@ public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid
                 Client = Client,
                 Id = publisherCid, // assuming publisher cid is ipns and won't change
                 Sources = Sources,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Inner = result,
             };
         }

@@ -21,17 +21,11 @@ public class ModifiablePublisherNomadKuboEventStreamHandler(ICollection<ISharedE
     : ReadOnlyPublisherNomadKuboEventStreamHandler(listeningEventStreamHandlers), IModifiableNomadKuboEventStreamHandler<PublisherUpdateEvent>
 {
     /// <inheritdoc />
-    public bool ShouldPin { get; set; } = true;
-
-    /// <inheritdoc />
-    public required TimeSpan IpnsLifetime { get; set; }
-
-    /// <inheritdoc />
     public required string LocalEventStreamKeyName { get; init; }
 
     /// <inheritdoc />
     public async Task AppendNewEntryAsync(PublisherUpdateEvent updateEvent, CancellationToken cancellationToken = default)
     {
-        await this.AppendNewEntryAsync(updateEvent, IpnsLifetime, () => new KuboNomadEventStream { Entries = [], Id = Id, Label = Inner.Name, }, cancellationToken);
+        await this.AppendNewEntryAsync(updateEvent, KuboOptions.IpnsLifetime, () => new KuboNomadEventStream { Entries = [], Id = Id, Label = Inner.Name, }, cancellationToken);
     }
 }

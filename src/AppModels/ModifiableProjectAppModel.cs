@@ -83,7 +83,7 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
         foreach (var collaborator in Inner.Collaborators)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<User>(collaborator.User, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<User>(collaborator.User, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
             // assuming cid is ipns and won't change
@@ -96,9 +96,8 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                     Client = Client,
                     Id = ipnsId,
                     Sources = Sources,
-                    UseCache = UseCache,
+                    KuboOptions = KuboOptions,
                     Inner = result,
-                    IpnsLifetime = IpnsLifetime,
                     LocalEventStreamKeyName = value.Name,
                 }
                 :
@@ -108,11 +107,11 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                     Client = Client,
                     Id = ipnsId,
                     Inner = result,
-                    UseCache = UseCache,
+                    KuboOptions = KuboOptions,
                     Sources = Sources,
                 };
 
-            await userAppModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+            await userAppModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
             yield return ((IReadOnlyUser)userAppModel, collaborator.Role);
         }
     }
@@ -127,7 +126,7 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
         var existingKeys = existingKeysEnumerable.ToOrAsList();
 
         cancellationToken.ThrowIfCancellationRequested();
-        var (result, _) = await Client.ResolveDagCidAsync<Publisher>(Inner.Publisher, nocache: !UseCache, cancellationToken);
+        var (result, _) = await Client.ResolveDagCidAsync<Publisher>(Inner.Publisher, nocache: !KuboOptions.UseCache, cancellationToken);
         Guard.IsNotNull(result);
 
         // assuming cid is ipns and won't change
@@ -141,13 +140,12 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                 Client = Client,
                 Id = ipnsId,
                 Sources = Sources,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Inner = result,
-                IpnsLifetime = IpnsLifetime,
                 LocalEventStreamKeyName = existingKey.Name,
             };
 
-            await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+            await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
             return appModel;
         }
         // If current node has no write permissions
@@ -158,11 +156,11 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                 Client = Client,
                 Id = ipnsId,
                 Inner = result,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Sources = Sources,
             };
 
-            await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+            await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
             return appModel;
         }
     }
@@ -179,7 +177,7 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
         foreach (var projectCid in Inner.Dependencies)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
             
             // assuming cid is ipns and won't change
@@ -193,13 +191,12 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                     Client = Client,
                     Id = ipnsId,
                     Sources = Sources,
-                    UseCache = UseCache,
                     Inner = result,
-                    IpnsLifetime = IpnsLifetime,
+                    KuboOptions = KuboOptions,
                     LocalEventStreamKeyName = existingKey.Name,
                 };
 
-                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
                 yield return appModel;
             }
             // If current node has no write permissions
@@ -210,11 +207,11 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                     Client = Client,
                     Id = ipnsId,
                     Inner = result,
-                    UseCache = UseCache,
+                    KuboOptions = KuboOptions,
                     Sources = Sources,
                 };
 
-                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
                 yield return appModel;
             }
         }

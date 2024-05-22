@@ -44,7 +44,7 @@ public class ReadOnlyUserAppModel(ICollection<ISharedEventStreamHandler<Cid, Kub
         foreach (var projectCid in Inner.Projects)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
             yield return new ReadOnlyProjectAppModel(ListeningEventStreamHandlers)
@@ -52,7 +52,7 @@ public class ReadOnlyUserAppModel(ICollection<ISharedEventStreamHandler<Cid, Kub
                 Client = Client,
                 Id = projectCid, // assuming project cid is ipns and won't change
                 Sources = Sources,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Inner = result,
             };
         }
@@ -67,7 +67,7 @@ public class ReadOnlyUserAppModel(ICollection<ISharedEventStreamHandler<Cid, Kub
         foreach (var publisherCid in Inner.Publishers)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !UseCache, cancellationToken);
+            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
             yield return new ReadOnlyPublisherAppModel(ListeningEventStreamHandlers)
@@ -75,7 +75,7 @@ public class ReadOnlyUserAppModel(ICollection<ISharedEventStreamHandler<Cid, Kub
                 Client = Client,
                 Id = publisherCid, // assuming publisher cid is ipns and won't change
                 Sources = Sources,
-                UseCache = UseCache,
+                KuboOptions = KuboOptions,
                 Inner = result,
             };
         }

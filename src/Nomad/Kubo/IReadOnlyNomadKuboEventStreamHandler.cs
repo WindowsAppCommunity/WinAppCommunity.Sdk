@@ -17,9 +17,9 @@ public interface IReadOnlyNomadKuboEventStreamHandler<in TEventEntryContent> : I
     public ICoreApi Client { get; set; }
 
     /// <summary>
-    /// Whether to use the cache when resolving Ipns Cids.
+    /// Whether to pin content added to Ipfs.
     /// </summary>
-    public bool UseCache { get; set; }
+    public IKuboOptions KuboOptions { get; set; }
 
     /// <summary>
     /// Applies an event stream update to this object without side effects.

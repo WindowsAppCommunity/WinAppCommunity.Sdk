@@ -36,7 +36,7 @@ public abstract class ReadOnlyNomadKuboEventStreamHandler<TEventEntryContent> : 
     public required ICoreApi Client { get; set; }
 
     /// <inheritdoc />
-    public bool UseCache { get; set; }
+    public required IKuboOptions KuboOptions { get; set; }
 
     /// <inheritdoc />
     public ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>> ListeningEventStreamHandlers { get; set; }
