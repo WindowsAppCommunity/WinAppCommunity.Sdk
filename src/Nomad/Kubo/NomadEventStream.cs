@@ -1,5 +1,5 @@
 ﻿using Ipfs;
-using OwlCore.ComponentModel.Nomad;
+using OwlCore.Nomad;
 
 namespace WinAppCommunity.Sdk.Nomad.Kubo;
 

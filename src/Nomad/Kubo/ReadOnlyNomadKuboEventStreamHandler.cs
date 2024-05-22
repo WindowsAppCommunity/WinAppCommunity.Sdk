@@ -1,7 +1,7 @@
 ﻿using Ipfs;
 using Ipfs.CoreApi;
-using OwlCore.ComponentModel.Nomad;
 using OwlCore.Kubo;
+using OwlCore.Nomad;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ public abstract class ReadOnlyNomadKuboEventStreamHandler<TEventEntryContent> : 
     /// <summary>
     /// Creates a new instance of <see cref="ReadOnlyNomadKuboEventStreamHandler{TEventEntryContent}"/>.
     /// </summary>
-    /// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{T}.TryAdvanceEventStreamAsync"/>. </param>
+    /// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{TEventStreamEntry}.TryAdvanceEventStreamAsync"/>. </param>
     protected ReadOnlyNomadKuboEventStreamHandler(ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>> listeningEventStreamHandlers)
     {
         listeningEventStreamHandlers.Add(this);

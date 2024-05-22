@@ -1,10 +1,10 @@
 ﻿using Ipfs;
 using OwlCore.ComponentModel;
-using OwlCore.ComponentModel.Nomad;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using OwlCore.Nomad;
 using WinAppCommunity.Sdk.Nomad.Kubo;
 using WinAppCommunity.Sdk.Nomad.UpdateEvents;
 
@@ -16,7 +16,7 @@ namespace WinAppCommunity.Sdk.Nomad;
 /// <remarks>
 /// Creates a new instance of <see cref="ReadOnlyUserNomadKuboEventStreamHandler"/>.
 /// </remarks>
-/// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{T}.TryAdvanceEventStreamAsync"/>. </param>
+/// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{TEventStreamEntry}.TryAdvanceEventStreamAsync"/>. </param>
 public class ReadOnlyUserNomadKuboEventStreamHandler(ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>> listeningEventStreamHandlers)
     : ReadOnlyNomadKuboEventStreamHandler<UserUpdateEvent>(listeningEventStreamHandlers), IDelegable<Models.User>
 {

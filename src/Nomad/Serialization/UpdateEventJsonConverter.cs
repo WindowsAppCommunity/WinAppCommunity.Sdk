@@ -9,7 +9,7 @@ namespace WinAppCommunity.Sdk.Nomad.Serialization;
 /// <summary>
 /// A custom json convert for discriminating the various types of <see cref="WinAppCommunityUpdateEvent"/>.
 /// </summary>
-public class NomadEventJsonConverter : JsonConverter
+public class UpdateEventJsonConverter : JsonConverter
 {
     /// <inheritdoc />
     public override bool CanConvert(Type objectType)

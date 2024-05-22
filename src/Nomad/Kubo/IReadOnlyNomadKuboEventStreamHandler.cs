@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Ipfs;
+﻿using Ipfs;
 using Ipfs.CoreApi;
-using OwlCore.ComponentModel.Nomad;
+using OwlCore.Nomad;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WinAppCommunity.Sdk.Nomad.Kubo;
 

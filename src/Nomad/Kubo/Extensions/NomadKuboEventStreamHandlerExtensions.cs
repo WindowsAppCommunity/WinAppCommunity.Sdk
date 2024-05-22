@@ -1,15 +1,17 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Ipfs;
 using OwlCore.Kubo;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs.CoreApi;
 
 namespace WinAppCommunity.Sdk.Nomad.Kubo.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="IModifiableNomadKuboEventStreamHandler{TEventEntryContent}"/>.
 /// </summary>
-public static class ModifiableNomadKuboEventStreamHandlerExtensions
+public static class NomadKuboEventStreamHandlerExtensions
 {
     /// <summary>
     /// Appends a new event entry to the provided modifiable event stream handler.
@@ -37,7 +39,6 @@ public static class ModifiableNomadKuboEventStreamHandlerExtensions
             Id = eventStreamHandler.Id,
             TimestampUtc = DateTime.UtcNow,
             Content = updateEventDagCid,
-            PriorEventStreamEntry = null, // TODO: remove this
         };
 
         var newEventStreamEntryDagCid = await eventStreamHandler.Client.Dag.PutAsync(newEventStreamEntry, pin: eventStreamHandler.ShouldPin, cancel: cancellationToken);
@@ -49,5 +50,19 @@ public static class ModifiableNomadKuboEventStreamHandlerExtensions
 
         // Publish updated event stream
         _ = await eventStreamHandler.Client.Name.PublishAsync($"/ipfs/{updatedEventStreamDagCid}", key: eventStreamHandler.LocalEventStreamKeyName, lifetime: eventStreamHandler.IpnsLifetime, cancellationToken);
+    }
+
+    /// <summary>
+    /// Converts a nomad event stream entry content pointer to a <see cref="KuboNomadEventStreamEntry"/>.
+    /// </summary>
+    /// <param name="cid">The content pointer to resolve.</param>
+    /// <param name="client">The client to use to resolve the pointer.</param>
+    /// <param name="useCache">Whether to use cache or not.</param>
+    /// <param name="token">A token that can be used to cancel the ongoing operation.</param>
+    public static async Task<KuboNomadEventStreamEntry> ContentPointerToStreamEntryAsync(Cid cid, ICoreApi client, bool useCache, CancellationToken token)
+    {
+        var (streamEntry, _) = await client.ResolveDagCidAsync<KuboNomadEventStreamEntry>(cid, nocache: !useCache, token);
+        Guard.IsNotNull(streamEntry);
+        return streamEntry;
     }
 }

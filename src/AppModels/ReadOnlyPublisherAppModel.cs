@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using CommunityToolkit.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using CommunityToolkit.Diagnostics;
 using Ipfs;
-using OwlCore.ComponentModel.Nomad;
 using OwlCore.Kubo;
 using OwlCore.Storage;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using OwlCore.Nomad;
 using WinAppCommunity.Sdk.Models;
 using WinAppCommunity.Sdk.Nomad;
 using WinAppCommunity.Sdk.Nomad.Kubo;
@@ -16,9 +16,9 @@ namespace WinAppCommunity.Sdk.AppModels;
 /// <summary>
 /// Creates a new instance of <see cref="ModifiablePublisherAppModel"/>.
 /// </summary>
-/// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{T}.TryAdvanceEventStreamAsync"/>. </param>
+/// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{TEventStreamEntry}.TryAdvanceEventStreamAsync"/>. </param>
 public class ReadOnlyPublisherAppModel(ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>> listeningEventStreamHandlers)
-    : ReadOnlyPublisherNomadKuboEventStreamHandler(listeningEventStreamHandlers)
+    : ReadOnlyPublisherNomadKuboEventStreamHandler(listeningEventStreamHandlers), IReadOnlyPublisher
 {
     /// <summary>
     /// Gets the icon file for this user.
