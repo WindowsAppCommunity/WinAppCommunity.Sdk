@@ -87,22 +87,28 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
             Guard.IsNotNull(result);
 
             // assuming cid is ipns and won't change
-            var ipnsId = Inner.Publisher;
+            var ipnsId = collaborator.User;
 
-            ReadOnlyUserNomadKuboEventStreamHandler userAppModel = existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } value
-                // If current node has write permissions
-                ? new ModifiableUserAppModel(ListeningEventStreamHandlers)
+            // If current node has write permissions
+            if (existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } existingKey)
+            {
+                var appModel = new ModifiableUserAppModel(ListeningEventStreamHandlers)
                 {
                     Client = Client,
                     Id = ipnsId,
                     Sources = Sources,
                     KuboOptions = KuboOptions,
                     Inner = result,
-                    LocalEventStreamKeyName = value.Name,
-                }
-                :
-                // If current node has no write permissions
-                new ReadOnlyUserAppModel(ListeningEventStreamHandlers)
+                    LocalEventStreamKeyName = existingKey.Name,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return (appModel, collaborator.Role);
+            }
+            // If current node has no write permissions
+            else
+            {
+                var appModel = new ReadOnlyUserAppModel(ListeningEventStreamHandlers)
                 {
                     Client = Client,
                     Id = ipnsId,
@@ -111,8 +117,9 @@ public class ModifiableProjectAppModel(ICollection<ISharedEventStreamHandler<Cid
                     Sources = Sources,
                 };
 
-            await userAppModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
-            yield return ((IReadOnlyUser)userAppModel, collaborator.Role);
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return (appModel, collaborator.Role);
+            }
         }
     }
 

@@ -1,15 +1,20 @@
 ﻿using CommunityToolkit.Diagnostics;
 using Ipfs;
+using OwlCore.Extensions;
 using OwlCore.Kubo;
 using OwlCore.Nomad;
+using OwlCore.Nomad.Extensions;
 using OwlCore.Storage;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using WinAppCommunity.Sdk.Models;
 using WinAppCommunity.Sdk.Nomad;
 using WinAppCommunity.Sdk.Nomad.Kubo;
+using WinAppCommunity.Sdk.Nomad.Kubo.Extensions;
 
 namespace WinAppCommunity.Sdk.AppModels;
 
@@ -39,22 +44,51 @@ public class ReadOnlyUserAppModel(ICollection<ISharedEventStreamHandler<Cid, Kub
     /// Get the projects for this user.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
-    public async IAsyncEnumerable<ReadOnlyProjectAppModel> GetProjectsAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<IReadOnlyProject> GetProjectsAsync([EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        var existingKeysEnumerable = await Client.Key.ListAsync(cancellationToken);
+        var existingKeys = existingKeysEnumerable.ToOrAsList();
+
         foreach (var projectCid in Inner.Projects)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
-            yield return new ReadOnlyProjectAppModel(ListeningEventStreamHandlers)
+            // assuming cid is ipns and won't change
+            var ipnsId = projectCid;
+
+            // If current node has write permissions
+            if (existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } existingKey)
             {
-                Client = Client,
-                Id = projectCid, // assuming project cid is ipns and won't change
-                Sources = Sources,
-                KuboOptions = KuboOptions,
-                Inner = result,
-            };
+                var appModel = new ModifiableProjectAppModel(ListeningEventStreamHandlers)
+                {
+                    Client = Client,
+                    Id = ipnsId,
+                    Sources = Sources,
+                    KuboOptions = KuboOptions,
+                    Inner = result,
+                    LocalEventStreamKeyName = existingKey.Name,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return appModel;
+            }
+            // If current node has no write permissions
+            else
+            {
+                var appModel = new ReadOnlyProjectAppModel(ListeningEventStreamHandlers)
+                {
+                    Client = Client,
+                    Id = ipnsId,
+                    Inner = result,
+                    KuboOptions = KuboOptions,
+                    Sources = Sources,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return appModel;
+            }
         }
     }
 
@@ -62,22 +96,51 @@ public class ReadOnlyUserAppModel(ICollection<ISharedEventStreamHandler<Cid, Kub
     /// Get the publishers for this user.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
-    public async IAsyncEnumerable<ReadOnlyPublisherAppModel> GetPublishersAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<IReadOnlyPublisher> GetPublishersAsync([EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        var existingKeysEnumerable = await Client.Key.ListAsync(cancellationToken);
+        var existingKeys = existingKeysEnumerable.ToOrAsList();
+
         foreach (var publisherCid in Inner.Publishers)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !KuboOptions.UseCache, cancellationToken);
             Guard.IsNotNull(result);
 
-            yield return new ReadOnlyPublisherAppModel(ListeningEventStreamHandlers)
+            // assuming cid is ipns and won't change
+            var ipnsId = publisherCid;
+
+            // If current node has write permissions
+            if (existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } existingKey)
             {
-                Client = Client,
-                Id = publisherCid, // assuming publisher cid is ipns and won't change
-                Sources = Sources,
-                KuboOptions = KuboOptions,
-                Inner = result,
-            };
+                var appModel = new ModifiablePublisherAppModel(ListeningEventStreamHandlers)
+                {
+                    Client = Client,
+                    Id = ipnsId,
+                    Sources = Sources,
+                    KuboOptions = KuboOptions,
+                    Inner = result,
+                    LocalEventStreamKeyName = existingKey.Name,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return appModel;
+            }
+            // If current node has no write permissions
+            else
+            {
+                var appModel = new ReadOnlyPublisherAppModel(ListeningEventStreamHandlers)
+                {
+                    Client = Client,
+                    Id = ipnsId,
+                    Inner = result,
+                    KuboOptions = KuboOptions,
+                    Sources = Sources,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return appModel;
+            }
         }
     }
 }
