@@ -25,6 +25,10 @@ public record PublisherProjectAddEvent(string Id, Cid Project) : PublisherUpdate
 
 public record PublisherProjectRemoveEvent(string Id, Cid Project) : PublisherUpdateEvent(Id, nameof(PublisherProjectRemoveEvent));
 
+public record PublisherUserAddEvent(string Id, Cid User) : PublisherUpdateEvent(Id, nameof(PublisherUserAddEvent));
+
+public record PublisherUserRemoveEvent(string Id, Cid User) : PublisherUpdateEvent(Id, nameof(PublisherUserRemoveEvent));
+
 public record PublisherChildPublisherAddEvent(string Id, Cid ChildPublisher) : PublisherUpdateEvent(Id, nameof(PublisherChildPublisherAddEvent));
 
 public record PublisherChildPublisherRemoveEvent(string Id, Cid ChildPublisher) : PublisherUpdateEvent(Id, nameof(PublisherChildPublisherRemoveEvent));

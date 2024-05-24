@@ -28,10 +28,10 @@ public static class NomadKuboEventStreamHandlerExtensions
         var key = await eventStreamHandler.Client.GetOrCreateKeyAsync(eventStreamHandler.LocalEventStreamKeyName, _ => getDefaultEventStream(), ipnsLifetime, cancellationToken: cancellationToken);
         Guard.IsNotNull(key);
 
-        var (eventStream, _) = await eventStreamHandler.Client.ResolveDagCidAsync<KuboNomadEventStream>(key.Id, nocache: !eventStreamHandler.UseCache, cancellationToken);
+        var (eventStream, _) = await eventStreamHandler.Client.ResolveDagCidAsync<KuboNomadEventStream>(key.Id, nocache: !eventStreamHandler.KuboOptions.UseCache, cancellationToken);
         Guard.IsNotNull(eventStream);
 
-        var updateEventDagCid = await eventStreamHandler.Client.Dag.PutAsync(updateEvent, pin: eventStreamHandler.ShouldPin, cancel: cancellationToken);
+        var updateEventDagCid = await eventStreamHandler.Client.Dag.PutAsync(updateEvent, pin: eventStreamHandler.KuboOptions.ShouldPin, cancel: cancellationToken);
 
         // Create new nomad event stream entry
         var newEventStreamEntry = new KuboNomadEventStreamEntry
@@ -41,15 +41,15 @@ public static class NomadKuboEventStreamHandlerExtensions
             Content = updateEventDagCid,
         };
 
-        var newEventStreamEntryDagCid = await eventStreamHandler.Client.Dag.PutAsync(newEventStreamEntry, pin: eventStreamHandler.ShouldPin, cancel: cancellationToken);
+        var newEventStreamEntryDagCid = await eventStreamHandler.Client.Dag.PutAsync(newEventStreamEntry, pin: eventStreamHandler.KuboOptions.ShouldPin, cancel: cancellationToken);
 
         // Add new event to event stream
         eventStream.Entries.Add(newEventStreamEntryDagCid);
 
-        var updatedEventStreamDagCid = await eventStreamHandler.Client.Dag.PutAsync(eventStream, pin: eventStreamHandler.ShouldPin, cancel: cancellationToken);
+        var updatedEventStreamDagCid = await eventStreamHandler.Client.Dag.PutAsync(eventStream, pin: eventStreamHandler.KuboOptions.ShouldPin, cancel: cancellationToken);
 
         // Publish updated event stream
-        _ = await eventStreamHandler.Client.Name.PublishAsync($"/ipfs/{updatedEventStreamDagCid}", key: eventStreamHandler.LocalEventStreamKeyName, lifetime: eventStreamHandler.IpnsLifetime, cancellationToken);
+        _ = await eventStreamHandler.Client.Name.PublishAsync($"/ipfs/{updatedEventStreamDagCid}", key: eventStreamHandler.LocalEventStreamKeyName, lifetime: eventStreamHandler.KuboOptions.IpnsLifetime, cancellationToken);
     }
 
     /// <summary>

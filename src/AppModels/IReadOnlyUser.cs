@@ -6,6 +6,9 @@ using OwlCore.ComponentModel;
 
 namespace WinAppCommunity.Sdk.AppModels;
 
+/// <summary>
+/// Represents a user.
+/// </summary>
 public interface IReadOnlyUser : IDelegable<Models.User>
 {
     /// <summary>

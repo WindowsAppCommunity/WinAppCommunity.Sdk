@@ -5,6 +5,9 @@ using WinAppCommunity.Sdk.Models;
 
 namespace WinAppCommunity.Sdk.AppModels;
 
+/// <summary>
+/// Represents a project that can be modified.
+/// </summary>
 public interface IModifiableProject : IReadOnlyProject
 {
     public Task UpdateProjectNameAsync(string name, CancellationToken cancellationToken);

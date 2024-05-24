@@ -5,6 +5,9 @@ using WinAppCommunity.Sdk.Models;
 
 namespace WinAppCommunity.Sdk.AppModels;
 
+/// <summary>
+/// Represents a user that can be modified. 
+/// </summary>
 public interface IModifiableUser : IReadOnlyUser
 {
     public Task UpdateUserNameAsync(string newName, CancellationToken cancellationToken);

@@ -179,6 +179,12 @@ internal static partial class UpdateEventSerializationHelpers
             nameof(PublisherProjectRemoveEvent) when jObject["Project"] is { } projectRemoveToken && projectRemoveToken.ToObject<Cid>(serializer) is { } value =>
                 new PublisherProjectRemoveEvent(id, value),
 
+            nameof(PublisherUserAddEvent) when jObject["User"] is { } addToken && addToken.ToObject<Cid>(serializer) is { } value =>
+                new PublisherUserAddEvent(id, value),
+
+            nameof(PublisherUserRemoveEvent) when jObject["User"] is { } removeToken && removeToken.ToObject<Cid>(serializer) is { } value =>
+                new PublisherUserRemoveEvent(id, value),
+
             nameof(PublisherParentPublisherAddEvent) when jObject["ParentPublishers"] is { } addToken && addToken.ToObject<Cid>(serializer) is { } value =>
                 new PublisherParentPublisherAddEvent(id, value),
 

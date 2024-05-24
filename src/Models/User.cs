@@ -5,14 +5,7 @@ using System.Text.Json.Serialization;
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
-/// Represents a single managed user. 
-/// </summary>
-/// <param name="user"></param>
-/// <param name="ipnsCid"></param>
-public record ManagedUserMap(User user, Cid ipnsCid);
-
-/// <summary>
-/// Represents a single user.
+/// Represents a user.
 /// </summary>
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 public record User : IName

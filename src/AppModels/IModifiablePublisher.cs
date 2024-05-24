@@ -5,6 +5,9 @@ using WinAppCommunity.Sdk.Models;
 
 namespace WinAppCommunity.Sdk.AppModels;
 
+/// <summary>
+/// Represents a content publisher that can be modified.
+/// </summary>
 public interface IModifiablePublisher : IReadOnlyPublisher
 {
     public Task UpdateNameAsync(string newName, CancellationToken cancellationToken);
@@ -21,9 +24,13 @@ public interface IModifiablePublisher : IReadOnlyPublisher
 
     public Task RemoveLinkAsync(Link link, CancellationToken cancellationToken);
 
-    public Task AddProjectAsync(Cid publisher, CancellationToken cancellationToken);
+    public Task AddProjectAsync(Cid project, CancellationToken cancellationToken);
 
-    public Task RemoveProjectAsync(Cid publisher, CancellationToken cancellationToken);
+    public Task RemoveProjectAsync(Cid project, CancellationToken cancellationToken);
+
+    public Task AddUserAsync(Cid user, CancellationToken cancellationToken);
+
+    public Task RemoveUserAsync(Cid project, CancellationToken cancellationToken);
 
     public Task AddChildPublisherAsync(Cid childPublisher, CancellationToken cancellationToken);
 

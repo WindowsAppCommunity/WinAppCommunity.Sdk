@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace WinAppCommunity.Sdk.AppModels;
 
+/// <summary>
+/// Represents a publisher, a collection of projects and users who publishes content to users.
+/// </summary>
 public interface IReadOnlyPublisher : IDelegable<Models.Publisher>
 {
     /// <summary>
@@ -19,6 +22,12 @@ public interface IReadOnlyPublisher : IDelegable<Models.Publisher>
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
     public IAsyncEnumerable<IReadOnlyProject> GetProjectsAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Users who are registered to participate in this publisher.
+    /// </summary>
+    /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
+    public IAsyncEnumerable<IReadOnlyUser> GetUsersAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Get the child publishers for this publisher.

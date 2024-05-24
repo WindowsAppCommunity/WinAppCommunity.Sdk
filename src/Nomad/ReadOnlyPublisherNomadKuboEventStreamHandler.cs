@@ -24,7 +24,7 @@ public abstract class ReadOnlyPublisherNomadKuboEventStreamHandler(ICollection<I
     /// <summary>
     /// The inner <see cref="Publisher"/> record to alter when handling the event stream.
     /// </summary>
-    public required Publisher Inner { get; set; }
+    public Publisher Inner { get; set; } = new();
 
     /// <inheritdoc />
     public override Task ResetEventStreamPositionAsync(CancellationToken cancellationToken)
@@ -36,6 +36,7 @@ public abstract class ReadOnlyPublisherNomadKuboEventStreamHandler(ICollection<I
         Inner.ContactEmail = null;
         Inner.Links = [];
         Inner.Projects = [];
+        Inner.Users = [];
         Inner.ChildPublishers = [];
         Inner.IsPrivate = false;
 

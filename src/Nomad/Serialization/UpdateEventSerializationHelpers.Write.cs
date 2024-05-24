@@ -175,6 +175,12 @@ internal static partial class UpdateEventSerializationHelpers
             case PublisherProjectRemoveEvent projectRemoveEvent:
                 jObject.Add("Project", JValue.CreateString(projectRemoveEvent.Project.ToString()));
                 break;
+            case PublisherUserAddEvent userAddEvent:
+                jObject.Add("User", JValue.CreateString(userAddEvent.User.ToString()));
+                break;
+            case PublisherUserRemoveEvent userRemoveEvent:
+                jObject.Add("User", JValue.CreateString(userRemoveEvent.User.ToString()));
+                break;
             case PublisherChildPublisherAddEvent childPublisherAddEvent:
                 jObject.Add("ChildPublisher", JValue.CreateString(childPublisherAddEvent.ChildPublisher.ToString()));
                 break;

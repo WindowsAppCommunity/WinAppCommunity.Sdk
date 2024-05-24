@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
-/// Represents publisher data.
+/// Represents a content publisher.
 /// </summary>
 public record Publisher : IName
 {
@@ -20,6 +20,14 @@ public record Publisher : IName
         Owner = owner;
         AccentColor = accentColor;
         ContactEmail = contactEmail;
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="Publisher"/>.
+    /// </summary>
+    public Publisher()
+    : this(string.Empty, string.Empty, string.Empty, default, default)
+    {
     }
 
     /// <summary>
@@ -58,9 +66,14 @@ public record Publisher : IName
     public EmailConnection? ContactEmail { get; set; }
 
     /// <summary>
-    /// A list of the projects published by this publisher.
+    /// A list of the projects registered with this publisher.
     /// </summary>
     public Cid[] Projects { get; set; } = [];
+
+    /// <summary>
+    /// Users who are registered to participate in this publisher.
+    /// </summary>
+    public Cid[] Users { get; set; } = [];
 
     /// <summary>
     /// A list of other publishers who are managed under this publisher.

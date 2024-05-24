@@ -94,6 +94,58 @@ public class ModifiablePublisherAppModel(ICollection<ISharedEventStreamHandler<C
     }
 
     /// <summary>
+    /// Get the projects for this publisher.
+    /// </summary>
+    /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
+    public async IAsyncEnumerable<IReadOnlyUser> GetUsersAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        var existingKeysEnumerable = await Client.Key.ListAsync(cancellationToken);
+        var existingKeys = existingKeysEnumerable.ToOrAsList();
+
+        foreach (var projectCid in Inner.Users)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var (result, _) = await Client.ResolveDagCidAsync<User>(projectCid, nocache: !KuboOptions.UseCache, cancellationToken);
+            Guard.IsNotNull(result);
+
+            // assuming cid is ipns and won't change
+            var ipnsId = projectCid;
+
+            // If current node has write permissions
+            if (existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } existingKey)
+            {
+                var appModel = new ModifiableUserAppModel(ListeningEventStreamHandlers)
+                {
+                    Client = Client,
+                    Id = ipnsId,
+                    Sources = Sources,
+                    KuboOptions = KuboOptions,
+                    Inner = result,
+                    LocalEventStreamKeyName = existingKey.Name,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return appModel;
+            }
+            // If current node has no write permissions
+            else
+            {
+                var appModel = new ReadOnlyUserAppModel(ListeningEventStreamHandlers)
+                {
+                    Client = Client,
+                    Id = ipnsId,
+                    Inner = result,
+                    KuboOptions = KuboOptions,
+                    Sources = Sources,
+                };
+
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                yield return appModel;
+            }
+        }
+    }
+
+    /// <summary>
     /// Get the publishers for this publisher.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
@@ -259,16 +311,30 @@ public class ModifiablePublisherAppModel(ICollection<ISharedEventStreamHandler<C
         await AppendNewEntryAsync(removeEvent, cancellationToken);
     }
 
-    public async Task AddProjectAsync(Cid publisher, CancellationToken cancellationToken)
+    public async Task AddProjectAsync(Cid project, CancellationToken cancellationToken)
     {
-        var addEvent = new PublisherProjectAddEvent(Id, publisher);
+        var addEvent = new PublisherProjectAddEvent(Id, project);
         await ApplyEntryUpdateAsync(addEvent, cancellationToken);
         await AppendNewEntryAsync(addEvent, cancellationToken);
     }
 
-    public async Task RemoveProjectAsync(Cid publisher, CancellationToken cancellationToken)
+    public async Task RemoveProjectAsync(Cid project, CancellationToken cancellationToken)
     {
-        var removeEvent = new PublisherProjectRemoveEvent(Id, publisher);
+        var removeEvent = new PublisherProjectRemoveEvent(Id, project);
+        await ApplyEntryUpdateAsync(removeEvent, cancellationToken);
+        await AppendNewEntryAsync(removeEvent, cancellationToken);
+    }
+
+    public async Task AddUserAsync(Cid user, CancellationToken cancellationToken)
+    {
+        var removeEvent = new PublisherUserAddEvent(Id, user);
+        await ApplyEntryUpdateAsync(removeEvent, cancellationToken);
+        await AppendNewEntryAsync(removeEvent, cancellationToken);
+    }
+
+    public async Task RemoveUserAsync(Cid user, CancellationToken cancellationToken)
+    {
+        var removeEvent = new PublisherUserRemoveEvent(Id, user);
         await ApplyEntryUpdateAsync(removeEvent, cancellationToken);
         await AppendNewEntryAsync(removeEvent, cancellationToken);
     }

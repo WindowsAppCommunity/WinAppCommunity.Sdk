@@ -5,7 +5,7 @@ using System;
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
-/// Represents project data.
+/// Represents a project.
 /// </summary>
 public record Project : IName
 {
