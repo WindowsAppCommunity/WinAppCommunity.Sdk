@@ -1,10 +1,10 @@
 # WinAppCommunity.Sdk [![Version](https://img.shields.io/nuget/v/WinAppCommunity.Sdk.svg)](https://www.nuget.org/packages/WinAppCommunity.Sdk)
 
-Description goes here.
+Manage your membership, projects and publisher data in the Windows App Community.
 
-Extended description goes here. Tell people why they should use your module, how they can install it, and how they can use it. Documentation takes work!
+This is a Work In Progress and is not yet ready for use. Please check back later.
 
-## 
+Intended to supersede https://github.com/WinAppCommunity/uwpcommunity-backend
 
 ## Featuring:
 - x
@@ -24,16 +24,12 @@ Or using [dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet)
 ## Usage
 
 ```cs
-var test = new Thing();
+// TODO
 ```
-
-## Financing
-
-We accept donations [here](https://github.com/sponsors/Arlodotexe) and [here](https://www.patreon.com/arlodotexe), and we do not have any active bug bounties.
 
 ## Versioning
 
-Version numbering follows the Semantic versioning approach. However, if the major version is `0`, the code is considered alpha and breaking changes may occur as a minor update.
+Version numbering follows the Semantic versioning approach.
 
 ## License
 
