@@ -13,7 +13,9 @@ public record Project : IName
     /// Creates a new instance of <see cref="Project"/>.
     /// </summary>
     [JsonConstructor]
-    public Project(Cid publisher, string name, string description, Cid icon, Cid heroImage, Cid[] images, string[] features, string? accentColor, string category, DateTime createdAt, Cid[] dependencies, bool? forgetMe, bool isPrivate)
+    public Project(Cid publisher, string name, string description, Cid icon, Cid heroImage, Cid[] images,
+        string[] features, string? accentColor, string category, DateTime createdAt, Cid[] dependencies, bool? forgetMe,
+        bool isPrivate)
     {
         Publisher = publisher;
         Name = name;
@@ -28,6 +30,15 @@ public record Project : IName
         Dependencies = dependencies;
         ForgetMe = forgetMe;
         IsPrivate = isPrivate;
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="Project"/>.
+    /// </summary>
+    public Project()
+        : this(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, [], [], null, string.Empty,
+            DateTime.MinValue, [], null, false)
+    {
     }
 
     /// <summary>
@@ -98,7 +109,7 @@ public record Project : IName
     /// <summary>
     /// Holds information about project assets that have been published for consumption by an end user, such as a Microsoft Store app, a package on nuget.org, a git repo, etc.
     /// </summary>
-    public ApplicationConnection[] PublishedProjectConnections { get; set; } = [];
+    public ApplicationConnection[] Connections { get; set; } = [];
 
     /// <summary>
     /// A flag that indicates whether the profile has requested to be forgotten.

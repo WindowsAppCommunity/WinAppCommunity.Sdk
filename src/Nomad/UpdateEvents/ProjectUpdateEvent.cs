@@ -9,6 +9,8 @@ public record ProjectNameUpdateEvent(string Id, string Name) : ProjectUpdateEven
 
 public record ProjectDescriptionUpdateEvent(string Id, string Description) : ProjectUpdateEvent(Id, nameof(ProjectDescriptionUpdateEvent));
 
+public record ProjectPublisherUpdateEvent(string Id, Cid Publisher) : ProjectUpdateEvent(Id, nameof(ProjectPublisherUpdateEvent));
+
 public record ProjectIconUpdateEvent(string Id, Cid? Icon) : ProjectUpdateEvent(Id, nameof(ProjectIconUpdateEvent));
 
 public record ProjectHeroImageUpdateEvent(string Id, Cid? HeroImage) : ProjectUpdateEvent(Id, nameof(ProjectHeroImageUpdateEvent));

@@ -21,7 +21,7 @@ public class ModifiableProjectNomadKuboEventStreamHandler(ICollection<ISharedEve
     : ReadOnlyProjectNomadKuboEventStreamHandler(listeningEventStreamHandlers), IModifiableNomadKuboEventStreamHandler<ProjectUpdateEvent>
 {
     /// <inheritdoc />
-    public required string LocalEventStreamKeyName { get; init; }
+    public required string RoamingKeyName { get; init; }
     
     /// <inheritdoc />
     public async Task AppendNewEntryAsync(ProjectUpdateEvent updateEvent, CancellationToken cancellationToken = default)

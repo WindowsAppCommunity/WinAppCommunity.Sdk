@@ -37,6 +37,9 @@ public abstract class ReadOnlyNomadKuboEventStreamHandler<TEventEntryContent> : 
 
     /// <inheritdoc />
     public required IKuboOptions KuboOptions { get; set; }
+    
+    /// <inheritdoc />
+    public required string LocalEventStreamKeyName { get; init; }
 
     /// <inheritdoc />
     public ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>> ListeningEventStreamHandlers { get; set; }

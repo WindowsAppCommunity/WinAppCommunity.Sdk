@@ -23,7 +23,7 @@ public class ReadOnlyUserNomadKuboEventStreamHandler(ICollection<ISharedEventStr
     /// <summary>
     /// The inner <see cref="Models.User"/> record to alter when handling the event stream.
     /// </summary>
-    public required Models.User Inner { get; set; }
+    public Models.User Inner { get; init; } = new();
 
     /// <inheritdoc />
     public override Task ResetEventStreamPositionAsync(CancellationToken cancellationToken)

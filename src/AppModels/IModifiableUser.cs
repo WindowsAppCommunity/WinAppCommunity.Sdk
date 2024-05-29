@@ -1,6 +1,7 @@
 ﻿using Ipfs;
 using System.Threading;
 using System.Threading.Tasks;
+using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
 namespace WinAppCommunity.Sdk.AppModels;
@@ -10,13 +11,13 @@ namespace WinAppCommunity.Sdk.AppModels;
 /// </summary>
 public interface IModifiableUser : IReadOnlyUser
 {
-    public Task UpdateUserNameAsync(string newName, CancellationToken cancellationToken);
+    public Task UpdateNameAsync(string newName, CancellationToken cancellationToken);
 
-    public Task UpdateUserMarkdownAboutMeAsync(string newMarkdownAboutMe, CancellationToken cancellationToken);
+    public Task UpdateMarkdownAboutMeAsync(string newMarkdownAboutMe, CancellationToken cancellationToken);
 
-    public Task UpdateUserIconAsync(Cid? newIcon, CancellationToken cancellationToken);
+    public Task UpdateIconAsync(IFile? newIconFile, CancellationToken cancellationToken);
 
-    public Task ForgetMeAsync(bool forget, CancellationToken cancellationToken);
+    public Task UpdateForgetMeAsync(bool forget, CancellationToken cancellationToken);
 
     public Task AddConnectionAsync(ApplicationConnection newConnection, CancellationToken cancellationToken);
 
@@ -26,11 +27,11 @@ public interface IModifiableUser : IReadOnlyUser
 
     public Task RemoveLinkAsync(Link linkToRemove, CancellationToken cancellationToken);
 
-    public Task AddProjectAsync(Cid newProject, CancellationToken cancellationToken);
+    public Task AddProjectAsync(IReadOnlyProject newProject, CancellationToken cancellationToken);
 
-    public Task RemoveProjectAsync(Cid projectToRemove, CancellationToken cancellationToken);
+    public Task RemoveProjectAsync(IReadOnlyProject projectToRemove, CancellationToken cancellationToken);
 
-    public Task AddPublisherAsync(Cid newPublisher, CancellationToken cancellationToken);
+    public Task AddPublisherAsync(IReadOnlyPublisher newPublisher, CancellationToken cancellationToken);
 
-    public Task RemovePublisherAsync(Cid publisherToRemove, CancellationToken cancellationToken);
+    public Task RemovePublisherAsync(IReadOnlyPublisher publisherToRemove, CancellationToken cancellationToken);
 }

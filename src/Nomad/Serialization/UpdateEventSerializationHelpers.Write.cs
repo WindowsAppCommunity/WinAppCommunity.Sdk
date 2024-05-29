@@ -75,6 +75,9 @@ internal static partial class UpdateEventSerializationHelpers
             case ProjectDescriptionUpdateEvent projectDescriptionUpdateEvent:
                 jObject.Add("Description", new JValue(projectDescriptionUpdateEvent.Description));
                 break;
+            case ProjectPublisherUpdateEvent projectPublisherUpdateEvent:
+                jObject.Add("Publisher", new JValue(projectPublisherUpdateEvent.Publisher));
+                break;
             case ProjectIconUpdateEvent projectIconUpdateEvent:
                 jObject.Add("Icon",
                     projectIconUpdateEvent.Icon == null
@@ -127,10 +130,10 @@ internal static partial class UpdateEventSerializationHelpers
                 jObject.Add("Link", JObject.FromObject(projectLinkRemoveEvent.Link));
                 break;
             case ProjectPublishedConnectionAddEvent projectConnectionAddEvent:
-                jObject.Add("PublishedConnection", JObject.FromObject(projectConnectionAddEvent.Connection));
+                jObject.Add("Connection", JObject.FromObject(projectConnectionAddEvent.Connection));
                 break;
             case ProjectPublishedConnectionRemoveEvent projectConnectionRemoveEvent:
-                jObject.Add("PublishedConnection", JObject.FromObject(projectConnectionRemoveEvent.Connection));
+                jObject.Add("Connection", JObject.FromObject(projectConnectionRemoveEvent.Connection));
                 break;
             case ProjectForgetMeUpdateEvent projectForgetMeUpdateEvent:
                 jObject.Add("ForgetMe",

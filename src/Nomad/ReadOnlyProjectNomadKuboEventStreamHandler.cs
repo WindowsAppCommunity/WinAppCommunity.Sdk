@@ -25,7 +25,7 @@ public class ReadOnlyProjectNomadKuboEventStreamHandler(ICollection<ISharedEvent
     /// <summary>
     /// The inner <see cref="Project"/> record to alter when handling the event stream.
     /// </summary>
-    public required Project Inner { get; set; }
+    public Project Inner { get; set; } = new();
 
     /// <inheritdoc />
     public override Task ResetEventStreamPositionAsync(CancellationToken cancellationToken)
@@ -41,7 +41,7 @@ public class ReadOnlyProjectNomadKuboEventStreamHandler(ICollection<ISharedEvent
         Inner.Dependencies = Array.Empty<Cid>();
         Inner.Collaborators = Array.Empty<Collaborator>();
         Inner.Links = Array.Empty<Link>();
-        Inner.PublishedProjectConnections = Array.Empty<ApplicationConnection>();
+        Inner.Connections = Array.Empty<ApplicationConnection>();
         Inner.ForgetMe = false;
         Inner.IsPrivate = false;
 
@@ -94,10 +94,10 @@ public class ReadOnlyProjectNomadKuboEventStreamHandler(ICollection<ISharedEvent
             Inner.Links = Inner.Links.Where(link => link != linkRemoveEvent.Link).ToArray();
 
         if (updateEvent is ProjectPublishedConnectionAddEvent connectionAddEvent)
-            Inner.PublishedProjectConnections = Inner.PublishedProjectConnections.Append(connectionAddEvent.Connection).ToArray();
+            Inner.Connections = Inner.Connections.Append(connectionAddEvent.Connection).ToArray();
 
         if (updateEvent is ProjectPublishedConnectionRemoveEvent connectionRemoveEvent)
-            Inner.PublishedProjectConnections = Inner.PublishedProjectConnections.Where(conn => conn != connectionRemoveEvent.Connection).ToArray();
+            Inner.Connections = Inner.Connections.Where(conn => conn != connectionRemoveEvent.Connection).ToArray();
 
         if (updateEvent is ProjectAccentColorUpdateEvent accentColorUpdate)
             Inner.AccentColor = accentColorUpdate.AccentColor;

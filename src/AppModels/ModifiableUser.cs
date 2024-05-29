@@ -11,6 +11,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs.CoreApi;
 using WinAppCommunity.Sdk.Models;
 using WinAppCommunity.Sdk.Nomad;
 using WinAppCommunity.Sdk.Nomad.Kubo;
@@ -20,12 +21,41 @@ using WinAppCommunity.Sdk.Nomad.UpdateEvents;
 namespace WinAppCommunity.Sdk.AppModels;
 
 /// <summary>
-/// Creates a new instance of <see cref="ModifiableUserAppModel"/>.
+/// Creates a new instance of <see cref="ModifiableUser"/>.
 /// </summary>
 /// <param name="listeningEventStreamHandlers">A shared collection of all available event streams that should participate in playback of events using their respective <see cref="IEventStreamHandler{TEventStreamEntry}.TryAdvanceEventStreamAsync"/>. </param>
-public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>> listeningEventStreamHandlers)
+public class ModifiableUser(
+    ICollection<ISharedEventStreamHandler<Cid, KuboNomadEventStream, KuboNomadEventStreamEntry>>
+        listeningEventStreamHandlers)
     : ModifiableUserNomadKuboEventStreamHandler(listeningEventStreamHandlers), IModifiableUser
 {
+    /// <inheritdoc />
+    public string Name => Inner.Name;
+
+    /// <inheritdoc />
+    public string MarkdownAboutMe => Inner.MarkdownAboutMe;
+
+    /// <inheritdoc />
+    public ApplicationConnection[] Connections => Inner.Connections;
+
+    /// <inheritdoc />
+    public Link[] Links => Inner.Links;
+
+    /// <inheritdoc />
+    public bool? ForgetMe => Inner.ForgetMe;
+
+    /// <inheritdoc />
+    public event EventHandler<string>? NameUpdated;
+
+    /// <inheritdoc />
+    public event EventHandler<string>? MarkdownAboutMeUpdated;
+
+    /// <inheritdoc />
+    public event EventHandler<ApplicationConnection[]>? ConnectionsUpdated;
+
+    /// <inheritdoc />
+    public event EventHandler<Link[]>? LinksUpdated;
+
     /// <summary>
     /// Gets the icon file for this user.
     /// </summary>
@@ -45,7 +75,8 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
     /// Get the projects for this user.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
-    public async IAsyncEnumerable<IReadOnlyProject> GetProjectsAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<IReadOnlyProject> GetProjectsAsync(
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var existingKeysEnumerable = await Client.Key.ListAsync(cancellationToken);
         var existingKeys = existingKeysEnumerable.ToOrAsList();
@@ -53,8 +84,6 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
         foreach (var projectCid in Inner.Projects)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Project>(projectCid, nocache: !KuboOptions.UseCache, cancellationToken);
-            Guard.IsNotNull(result);
 
             // assuming cid is ipns and won't change
             var ipnsId = projectCid;
@@ -62,32 +91,41 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
             // If current node has write permissions
             if (existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } existingKey)
             {
-                var appModel = new ModifiableProjectAppModel(ListeningEventStreamHandlers)
+                var appModel = new ModifiableProject(ListeningEventStreamHandlers)
                 {
                     Client = Client,
                     Id = ipnsId,
                     Sources = Sources,
                     KuboOptions = KuboOptions,
-                    Inner = result,
-                    LocalEventStreamKeyName = existingKey.Name,
+                    LocalEventStreamKeyName = LocalEventStreamKeyName,
+                    RoamingKeyName = existingKey.Name,
                 };
 
-                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow,
+                    (cid, ct) =>
+                        NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client,
+                            KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                _ = appModel.PublishRoamingAsync<ModifiableProject, ProjectUpdateEvent, Project>(
+                    cancellationToken);
+
                 yield return appModel;
             }
             // If current node has no write permissions
             else
             {
-                var appModel = new ReadOnlyProjectAppModel(ListeningEventStreamHandlers)
+                var appModel = new ReadOnlyProject(ListeningEventStreamHandlers)
                 {
                     Client = Client,
                     Id = ipnsId,
-                    Inner = result,
                     KuboOptions = KuboOptions,
                     Sources = Sources,
+                    LocalEventStreamKeyName = LocalEventStreamKeyName,
                 };
 
-                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow, (cid, ct) => NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
+                await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow,
+                    (cid, ct) =>
+                        NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client,
+                            KuboOptions.UseCache, ct), cancellationToken).ToListAsync(cancellationToken);
                 yield return appModel;
             }
         }
@@ -97,7 +135,8 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
     /// Get the publishers for this user.
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
-    public async IAsyncEnumerable<IReadOnlyPublisher> GetPublishersAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<IReadOnlyPublisher> GetPublishersAsync(
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var existingKeysEnumerable = await Client.Key.ListAsync(cancellationToken);
         var existingKeys = existingKeysEnumerable.ToOrAsList();
@@ -105,8 +144,6 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
         foreach (var publisherCid in Inner.Publishers)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (result, _) = await Client.ResolveDagCidAsync<Publisher>(publisherCid, nocache: !KuboOptions.UseCache, cancellationToken);
-            Guard.IsNotNull(result);
 
             // assuming cid is ipns and won't change
             var ipnsId = publisherCid;
@@ -114,65 +151,82 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
             // If current node has write permissions
             if (existingKeys.FirstOrDefault(x => x.Id == ipnsId) is { } existingKey)
             {
-                var appModel = new ModifiablePublisherAppModel(ListeningEventStreamHandlers)
+                var appModel = new ModifiablePublisher(ListeningEventStreamHandlers)
                 {
                     Client = Client,
                     Id = ipnsId,
                     Sources = Sources,
                     KuboOptions = KuboOptions,
-                    Inner = result,
-                    LocalEventStreamKeyName = existingKey.Name,
+                    LocalEventStreamKeyName = LocalEventStreamKeyName,
+                    RoamingKeyName = existingKey.Name,
                 };
 
                 await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow,
                     (cid, ct) =>
-                        NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache,
+                        NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client,
+                            KuboOptions.UseCache,
                             ct), cancellationToken).ToListAsync(cancellationToken);
+
+                _ = appModel.PublishRoamingAsync<ModifiablePublisher, PublisherUpdateEvent, Publisher>(
+                    cancellationToken);
+
                 yield return appModel;
             }
             // If current node has no write permissions
             else
             {
-                var appModel = new ReadOnlyPublisherAppModel(ListeningEventStreamHandlers)
+                var appModel = new ReadOnlyPublisher(ListeningEventStreamHandlers)
                 {
                     Client = Client,
                     Id = ipnsId,
-                    Inner = result,
-                    KuboOptions = KuboOptions,
                     Sources = Sources,
+                    KuboOptions = KuboOptions,
+                    LocalEventStreamKeyName = LocalEventStreamKeyName,
                 };
 
                 await appModel.AdvanceEventStreamToAtLeastAsync(EventStreamPosition?.TimestampUtc ?? DateTime.UtcNow,
                     (cid, ct) =>
-                        NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client, KuboOptions.UseCache,
+                        NomadKuboEventStreamHandlerExtensions.ContentPointerToStreamEntryAsync(cid, Client,
+                            KuboOptions.UseCache,
                             ct), cancellationToken).ToListAsync(cancellationToken);
+                
                 yield return appModel;
             }
         }
     }
 
-    public async Task UpdateUserNameAsync(string newName, CancellationToken cancellationToken)
+    public async Task UpdateNameAsync(string newName, CancellationToken cancellationToken)
     {
         var updateEvent = new UserNameUpdateEvent(Id, newName);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task UpdateUserMarkdownAboutMeAsync(string newMarkdownAboutMe, CancellationToken cancellationToken)
+    public async Task UpdateMarkdownAboutMeAsync(string newMarkdownAboutMe, CancellationToken cancellationToken)
     {
         var updateEvent = new UserMarkdownAboutMeUpdateEvent(Id, newMarkdownAboutMe);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task UpdateUserIconAsync(Cid? newIcon, CancellationToken cancellationToken)
+    public async Task UpdateIconAsync(IFile? iconFile, CancellationToken cancellationToken)
     {
-        var updateEvent = new UserIconUpdateEvent(Id, newIcon);
+        Cid? newCid = null;
+
+        if (iconFile is not null)
+        {
+            using var stream = await iconFile.OpenReadAsync(cancellationToken);
+            var fileSystemNode = await Client.FileSystem.AddAsync(stream, iconFile.Name,
+                new AddFileOptions { Pin = KuboOptions.ShouldPin }, cancellationToken);
+            newCid = fileSystemNode.Id;
+        }
+
+        var updateEvent = new UserIconUpdateEvent(Id, newCid);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task ForgetMeAsync(bool forget, CancellationToken cancellationToken)
+    public async Task UpdateForgetMeAsync(bool forget, CancellationToken cancellationToken)
     {
         var updateEvent = new UserForgetMeUpdateEvent(Id, forget);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
@@ -186,7 +240,8 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task RemoveConnectionAsync(ApplicationConnection connectionToRemove, CancellationToken cancellationToken)
+    public async Task RemoveConnectionAsync(ApplicationConnection connectionToRemove,
+        CancellationToken cancellationToken)
     {
         var updateEvent = new UserConnectionRemoveEvent(Id, connectionToRemove);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
@@ -207,30 +262,30 @@ public class ModifiableUserAppModel(ICollection<ISharedEventStreamHandler<Cid, K
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task AddProjectAsync(Cid newProject, CancellationToken cancellationToken)
+    public async Task AddProjectAsync(IReadOnlyProject newProject, CancellationToken cancellationToken)
     {
-        var updateEvent = new UserProjectAddEvent(Id, newProject);
+        var updateEvent = new UserProjectAddEvent(Id, newProject.Id);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task RemoveProjectAsync(Cid projectToRemove, CancellationToken cancellationToken)
+    public async Task RemoveProjectAsync(IReadOnlyProject projectToRemove, CancellationToken cancellationToken)
     {
-        var updateEvent = new UserProjectRemoveEvent(Id, projectToRemove);
+        var updateEvent = new UserProjectRemoveEvent(Id, projectToRemove.Id);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task AddPublisherAsync(Cid newPublisher, CancellationToken cancellationToken)
+    public async Task AddPublisherAsync(IReadOnlyPublisher newPublisher, CancellationToken cancellationToken)
     {
-        var updateEvent = new UserPublisherAddEvent(Id, newPublisher);
+        var updateEvent = new UserPublisherAddEvent(Id, newPublisher.Id);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }
 
-    public async Task RemovePublisherAsync(Cid publisherToRemove, CancellationToken cancellationToken)
+    public async Task RemovePublisherAsync(IReadOnlyPublisher publisherToRemove, CancellationToken cancellationToken)
     {
-        var updateEvent = new UserPublisherRemoveEvent(Id, publisherToRemove);
+        var updateEvent = new UserPublisherRemoveEvent(Id, publisherToRemove.Id);
         await ApplyEntryUpdateAsync(updateEvent, cancellationToken);
         await AppendNewEntryAsync(updateEvent, cancellationToken);
     }

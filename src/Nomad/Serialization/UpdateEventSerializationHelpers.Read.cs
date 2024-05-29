@@ -105,6 +105,9 @@ internal static partial class UpdateEventSerializationHelpers
             nameof(ProjectDescriptionUpdateEvent) when jObject["Description"] is { } descriptionToken && descriptionToken.Value<string>() is { } value =>
                 new ProjectDescriptionUpdateEvent(id, value),
 
+            nameof(ProjectPublisherUpdateEvent) when jObject["Publisher"] is { } publisherToken && publisherToken.ToObject<Cid>(serializer) is { } value =>
+                new ProjectPublisherUpdateEvent(id, value),
+
             nameof(ProjectIconUpdateEvent) when jObject["Icon"] is { } iconToken =>
                 new ProjectIconUpdateEvent(id, iconToken.ToObject<Cid?>(serializer)),
 
@@ -135,10 +138,10 @@ internal static partial class UpdateEventSerializationHelpers
             nameof(ProjectLinkRemoveEvent) when jObject["Link"] is { } linkRemoveToken && linkRemoveToken.ToObject<Link>(serializer) is { } value =>
                 new ProjectLinkRemoveEvent(id, value),
 
-            nameof(ProjectPublishedConnectionAddEvent) when jObject["PublishedProjectConnection"] is { } connectionAddToken && connectionAddToken.ToObject<ApplicationConnection>(serializer) is { } value =>
+            nameof(ProjectPublishedConnectionAddEvent) when jObject["Connection"] is { } connectionAddToken && connectionAddToken.ToObject<ApplicationConnection>(serializer) is { } value =>
                 new ProjectPublishedConnectionAddEvent(id, value),
 
-            nameof(ProjectPublishedConnectionRemoveEvent) when jObject["PublishedProjectConnection"] is { } connectionRemoveToken && connectionRemoveToken.ToObject<ApplicationConnection>(serializer) is { } value =>
+            nameof(ProjectPublishedConnectionRemoveEvent) when jObject["Connection"] is { } connectionRemoveToken && connectionRemoveToken.ToObject<ApplicationConnection>(serializer) is { } value =>
                 new ProjectPublishedConnectionRemoveEvent(id, value),
 
             nameof(ProjectForgetMeUpdateEvent) when jObject["ForgetMe"] is { } forgetMeToken =>

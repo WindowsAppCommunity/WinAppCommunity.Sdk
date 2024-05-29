@@ -51,6 +51,9 @@ public abstract class ReadOnlyPublisherNomadKuboEventStreamHandler(ICollection<I
 
         if (updateEvent is PublisherDescriptionUpdateEvent descriptionUpdate)
             Inner.Description = descriptionUpdate.Description;
+        
+        if (updateEvent is PublisherOwnerUpdateEvent ownerUpdateEvent)
+            Inner.Owner = ownerUpdateEvent.Owner;
 
         if (updateEvent is PublisherIconUpdateEvent iconUpdate)
             Inner.Icon = iconUpdate.Icon;
@@ -72,6 +75,12 @@ public abstract class ReadOnlyPublisherNomadKuboEventStreamHandler(ICollection<I
 
         if (updateEvent is PublisherProjectRemoveEvent projectRemove)
             Inner.Projects = Inner.Projects.Where(p => p != projectRemove.Project).ToArray();
+
+        if (updateEvent is PublisherUserAddEvent userAdd)
+            Inner.Users = Inner.Users.Append(userAdd.User).ToArray();
+
+        if (updateEvent is PublisherUserRemoveEvent userRemove)
+            Inner.Users = Inner.Users.Where(p => p != userRemove.User).ToArray();
 
         if (updateEvent is PublisherChildPublisherAddEvent childPublisherAdd)
             Inner.ChildPublishers = Inner.ChildPublishers.Append(childPublisherAdd.ChildPublisher).ToArray();

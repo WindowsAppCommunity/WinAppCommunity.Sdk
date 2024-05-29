@@ -21,8 +21,8 @@ public class ModifiablePublisherNomadKuboEventStreamHandler(ICollection<ISharedE
     : ReadOnlyPublisherNomadKuboEventStreamHandler(listeningEventStreamHandlers), IModifiableNomadKuboEventStreamHandler<PublisherUpdateEvent>
 {
     /// <inheritdoc />
-    public required string LocalEventStreamKeyName { get; init; }
-
+    public required string RoamingKeyName { get; init; }
+    
     /// <inheritdoc />
     public async Task AppendNewEntryAsync(PublisherUpdateEvent updateEvent, CancellationToken cancellationToken = default)
     {
