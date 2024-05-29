@@ -1,23 +1,23 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
 using Ipfs;
 using OwlCore.Extensions;
 using OwlCore.Kubo;
 using OwlCore.Nomad;
 using OwlCore.Nomad.Extensions;
 using OwlCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using WinAppCommunity.Sdk.Models;
 using WinAppCommunity.Sdk.Nomad;
 using WinAppCommunity.Sdk.Nomad.Kubo;
 using WinAppCommunity.Sdk.Nomad.Kubo.Extensions;
 using WinAppCommunity.Sdk.Nomad.UpdateEvents;
 
-namespace WinAppCommunity.Sdk.AppModels;
+namespace WinAppCommunity.Sdk;
 
 /// <summary>
 /// Creates a new instance of <see cref="ReadOnlyUser"/>.

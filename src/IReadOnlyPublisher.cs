@@ -1,12 +1,12 @@
 ﻿using System;
-using OwlCore.ComponentModel;
-using OwlCore.Storage;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using OwlCore.ComponentModel;
+using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
-namespace WinAppCommunity.Sdk.AppModels;
+namespace WinAppCommunity.Sdk;
 
 /// <summary>
 /// Represents a publisher, a collection of projects and users who publishes content to users.

@@ -1,10 +1,9 @@
-﻿using Ipfs;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
-namespace WinAppCommunity.Sdk.AppModels;
+namespace WinAppCommunity.Sdk;
 
 /// <summary>
 /// Represents a project that can be modified.

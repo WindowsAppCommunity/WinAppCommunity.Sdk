@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using WinAppCommunity.Sdk.Nomad.UpdateEvents;
 
-namespace WinAppCommunity.Sdk.AppModels;
+namespace WinAppCommunity.Sdk.Nomad.Serialization;
 
 internal static partial class UpdateEventSerializationHelpers
 {

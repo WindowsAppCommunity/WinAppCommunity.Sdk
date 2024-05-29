@@ -1,14 +1,14 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System;
+using System.Linq;
+using CommunityToolkit.Diagnostics;
 using Ipfs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OwlCore.Extensions;
-using System;
-using System.Linq;
 using WinAppCommunity.Sdk.Models;
 using WinAppCommunity.Sdk.Nomad.UpdateEvents;
 
-namespace WinAppCommunity.Sdk.AppModels;
+namespace WinAppCommunity.Sdk.Nomad.Serialization;
 
 internal static partial class UpdateEventSerializationHelpers
 {

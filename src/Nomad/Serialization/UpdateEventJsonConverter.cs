@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using WinAppCommunity.Sdk.AppModels;
 using WinAppCommunity.Sdk.Nomad.UpdateEvents;
 
 namespace WinAppCommunity.Sdk.Nomad.Serialization;
