@@ -28,10 +28,6 @@ public record ProjectDependencyAddEvent(string Id, Cid Dependency) : ProjectUpda
 
 public record ProjectDependencyRemoveEvent(string Id, Cid Dependency) : ProjectUpdateEvent(Id, nameof(ProjectDependencyRemoveEvent));
 
-public record ProjectCollaboratorAddEvent(string Id, Collaborator Collaborator) : ProjectUpdateEvent(Id, nameof(ProjectCollaboratorAddEvent));
-
-public record ProjectCollaboratorRemoveEvent(string Id, Collaborator Collaborator) : ProjectUpdateEvent(Id, nameof(ProjectCollaboratorRemoveEvent));
-
 public record ProjectLinkAddEvent(string Id, Link Link) : ProjectUpdateEvent(Id, nameof(ProjectLinkAddEvent));
 
 public record ProjectLinkRemoveEvent(string Id, Link Link) : ProjectUpdateEvent(Id, nameof(ProjectLinkRemoveEvent));

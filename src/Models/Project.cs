@@ -26,7 +26,7 @@ public record Project : IName
     /// <summary>
     /// An extended description of this project.
     /// </summary>
-    public string ExtendedDescription { get; set; }
+    public required string ExtendedDescription { get; set; }
 
     /// <summary>
     /// A list of <see cref="DagCid"/>s that point to images demonstrating this project.

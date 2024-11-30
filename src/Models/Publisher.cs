@@ -21,7 +21,7 @@ public record Publisher : IName
     /// <summary>
     /// An extended description of the publisher.
     /// </summary>
-    public string ExtendedDescription { get; set; }
+    public required string ExtendedDescription { get; set; }
 
     /// <summary>
     /// A hex-encoded accent color for this publisher.

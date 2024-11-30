@@ -114,12 +114,6 @@ internal static partial class UpdateEventSerializationHelpers
             case ProjectDependencyRemoveEvent projectDependencyRemoveEvent:
                 jObject.Add("Dependency", JValue.CreateString(projectDependencyRemoveEvent.Dependency.ToString()));
                 break;
-            case ProjectCollaboratorAddEvent projectCollaboratorAddEvent:
-                jObject.Add("Collaborator", JObject.FromObject(projectCollaboratorAddEvent.Collaborator));
-                break;
-            case ProjectCollaboratorRemoveEvent projectCollaboratorRemoveEvent:
-                jObject.Add("Collaborator", JObject.FromObject(projectCollaboratorRemoveEvent.Collaborator));
-                break;
             case ProjectLinkAddEvent projectLinkAddEvent:
                 jObject.Add("Link", JObject.FromObject(projectLinkAddEvent.Link));
                 break;
@@ -139,7 +133,7 @@ internal static partial class UpdateEventSerializationHelpers
                         : new JValue(projectForgetMeUpdateEvent.ForgetMe.Value));
                 break;
             case ProjectPrivacyUpdateEvent projectPrivacyUpdateEvent:
-                jObject.Add("IsPrivate", new JValue(projectPrivacyUpdateEvent.IsPrivate));
+                jObject.Add("IsUnlisted", new JValue(projectPrivacyUpdateEvent.IsUnlisted));
                 break;
         }
     }
