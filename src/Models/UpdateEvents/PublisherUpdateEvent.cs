@@ -34,4 +34,4 @@ public record PublisherParentPublisherAddEvent(string Id, Cid ParentPublisher) :
 
 public record PublisherParentPublisherRemoveEvent(string Id, Cid ParentPublisher) : PublisherUpdateEvent(Id, nameof(PublisherParentPublisherRemoveEvent));
 
-public record PublisherPrivateFlagUpdateEvent(string Id, bool IsPrivate) : PublisherUpdateEvent(Id, nameof(PublisherPrivateFlagUpdateEvent));
+public record PublisherPrivateFlagUpdateEvent(string Id, bool IsUnlisted) : PublisherUpdateEvent(Id, nameof(PublisherPrivateFlagUpdateEvent));

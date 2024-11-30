@@ -1,14 +1,11 @@
 using Ipfs;
-using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
 /// Represents a user.
 /// </summary>
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 public record User : IName
 {
     /// <summary>
@@ -17,19 +14,14 @@ public record User : IName
     public required string Name { get; set; }
 
     /// <summary>
-    /// A summary of the user in markdown syntax.
+    /// An extended description of the user in markdown syntax.
     /// </summary>
-    public required string MarkdownAboutMe { get; set; }
-
-    /// <summary>
-    /// An icon to represent this user.
-    /// </summary>
-    public Cid? Icon { get; set; }
+    public required string ExtendedDescription { get; set; }
 
     /// <summary>
     /// Represents application connections added by the user.
     /// </summary>
-    public Dictionary<string, DagCid> Connections { get; set; } = [];
+    public Dictionary<string, DagCid> Connections { get; set; } = new();
 
     /// <summary>
     /// Represents links to external profiles or resources added by the user.
@@ -37,14 +29,14 @@ public record User : IName
     public Link[] Links { get; set; } = [];
 
     /// <summary>
-    /// A list of all the projects the user is registered on.
+    /// A list of all the projects the user is registered on, along with their roles.
     /// </summary>
-    public Cid[] Projects { get; set; } = [];
+    public Dictionary<DagCid, Role> Projects { get; set; } = new();
 
     /// <summary>
-    /// Represents all publishers the user is registered on.
+    /// Represents all publishers the user is registered on, along with their roles.
     /// </summary>
-    public Cid[] Publishers { get; set; } = [];
+    public Dictionary<DagCid, Role> Publishers { get; set; } = new();
 
     /// <summary>
     /// A flag that indicates whether the profile has requested to be forgotten.

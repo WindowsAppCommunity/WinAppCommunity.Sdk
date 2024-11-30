@@ -122,12 +122,6 @@ internal static partial class UpdateEventSerializationHelpers
             nameof(ProjectFeatureRemoveEvent) when jObject["Feature"] is { } featureRemoveToken && featureRemoveToken.Value<string>() is { } value =>
                 new ProjectFeatureRemoveEvent(id, value),
 
-            nameof(ProjectCollaboratorAddEvent) when jObject["Collaborator"] is { } collaboratorAddToken && collaboratorAddToken.ToObject<Collaborator>(serializer) is { } value =>
-                new ProjectCollaboratorAddEvent(id, value),
-
-            nameof(ProjectCollaboratorRemoveEvent) when jObject["Collaborator"] is { } collaboratorRemoveToken && collaboratorRemoveToken.ToObject<Collaborator>(serializer) is { } value =>
-                new ProjectCollaboratorRemoveEvent(id, value),
-
             nameof(ProjectLinkAddEvent) when jObject["Link"] is { } linkAddToken && linkAddToken.ToObject<Link>(serializer) is { } value =>
                 new ProjectLinkAddEvent(id, value),
 

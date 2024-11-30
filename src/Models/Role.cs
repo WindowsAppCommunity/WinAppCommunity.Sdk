@@ -8,24 +8,14 @@ namespace WinAppCommunity.Sdk.Models;
 public record Role : IName
 {
     /// <summary>
-    /// Creates a new instance of <see cref="Role"/>.
-    /// </summary>
-    [JsonConstructor]
-    public Role(string name, string description)
-    {
-        Name = name;
-        Description = description;
-    }
-
-    /// <summary>
     /// The name of the role.
     /// </summary>
-    public string Name { get; }
+    public required string Name { get; init; }
 
     /// <summary>
     /// A description for the role.
     /// </summary>
-    public string Description { get; }
+    public required string Description { get; init; }
 
     /// <inheritdoc />
     public virtual bool Equals(Role? other)

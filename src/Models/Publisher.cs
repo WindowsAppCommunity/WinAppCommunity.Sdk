@@ -1,5 +1,5 @@
 using Ipfs;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace WinAppCommunity.Sdk.Models;
 
@@ -9,45 +9,19 @@ namespace WinAppCommunity.Sdk.Models;
 public record Publisher : IName
 {
     /// <summary>
-    /// Creates a new instance of <see cref="Publisher"/>.
-    /// </summary>
-    [JsonConstructor]
-    public Publisher(string name, string description, Cid owner, Cid? icon, string? accentColor)
-    {
-        Name = name;
-        Description = description;
-        Icon = icon;
-        Owner = owner;
-        AccentColor = accentColor;
-    }
-
-    /// <summary>
-    /// Creates a new instance of <see cref="Publisher"/>.
-    /// </summary>
-    public Publisher()
-    : this(string.Empty, string.Empty, string.Empty, default, default)
-    {
-    }
-
-    /// <summary>
-    /// The Cid of the <see cref="User"/> who owns this publisher.
-    /// </summary>
-    public Cid Owner { get; set; }
-
-    /// <summary>
     /// The name of the publisher.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// A description of the publisher.
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
-    /// An icon to represent this publisher.
+    /// An extended description of the publisher.
     /// </summary>
-    public Cid? Icon { get; set; }
+    public required string ExtendedDescription { get; set; }
 
     /// <summary>
     /// A hex-encoded accent color for this publisher.
@@ -60,24 +34,29 @@ public record Publisher : IName
     public Link[] Links { get; set; } = [];
 
     /// <summary>
-    /// A list of the projects registered with this publisher.
+    /// Users who are registered to participate in this publisher, along with their roles.
     /// </summary>
-    public Cid[] Projects { get; set; } = [];
-
-    /// <summary>
-    /// Users who are registered to participate in this publisher.
-    /// </summary>
-    public Cid[] Users { get; set; } = [];
+    public Dictionary<DagCid, Role> Users { get; set; } = new();
 
     /// <summary>
     /// A list of other publishers who are managed under this publisher.
     /// </summary>
-    public Cid[] ParentPublishers { get; set; } = [];
+    public DagCid[] ParentPublishers { get; set; } = [];
 
     /// <summary>
     /// A list of other publishers who are managed under this publisher.
     /// </summary>
-    public Cid[] ChildPublishers { get; set; } = [];
+    public DagCid[] ChildPublishers { get; set; } = [];
+
+    /// <summary>
+    /// Holds information about publisher assets that have been published for consumption by an end user, such as a Microsoft Store app, a package on nuget.org, a git repo, etc.
+    /// </summary>
+    public Dictionary<string, DagCid> Connections { get; set; } = new();
+
+    /// <summary>
+    /// A flag that indicates whether the profile has requested to be forgotten.
+    /// </summary>
+    public bool? ForgetMe { get; set; }
 
     /// <summary>
     /// A flag indicating whether this is a non-public project.
