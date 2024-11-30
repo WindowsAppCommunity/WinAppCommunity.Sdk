@@ -41,7 +41,7 @@ public interface IReadOnlyEntity : IReadOnlyConnectionsCollection, IReadOnlyLink
     event EventHandler<string>? DescriptionUpdated;
 
     /// <summary>
-    /// Raised when <see cref="Description"/> is updated.
+    /// Raised when <see cref="ExtendedDescription"/> is updated.
     /// </summary>
     event EventHandler<string>? ExtendedDescriptionUpdated;
 

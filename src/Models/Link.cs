@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace WinAppCommunity.Sdk.Models;
 
 /// <summary>
@@ -8,28 +6,17 @@ namespace WinAppCommunity.Sdk.Models;
 public record Link
 {
     /// <summary>
-    /// Creates a new instance of <see cref="Link"/>.
-    /// </summary>
-    [JsonConstructor]
-    public Link(string url, string name, string description)
-    {
-        Url = url;
-        Name = name;
-        Description = description;
-    }
-
-    /// <summary>
     /// The external url this link points to.
     /// </summary>
-    public string Url { get; set; }
+    public required string Url { get; set; }
 
     /// <summary>
     /// A display name for this url.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// A description of this url (for accessibility or display).
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 }

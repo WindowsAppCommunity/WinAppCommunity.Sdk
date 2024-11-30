@@ -16,7 +16,7 @@ public interface IModifiableEntity : IReadOnlyEntity, IModifiableConnectionsColl
     public Task UpdateDescriptionAsync(string description, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Updates the description of this entity.
+    /// Updates the extended description of this entity.
     /// </summary>
     public Task UpdateExtendedDescriptionAsync(string extendedDescription, CancellationToken cancellationToken);
 

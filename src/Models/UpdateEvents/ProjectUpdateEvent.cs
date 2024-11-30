@@ -38,4 +38,4 @@ public record ProjectLinkRemoveEvent(string Id, Link Link) : ProjectUpdateEvent(
 
 public record ProjectForgetMeUpdateEvent(string Id, bool? ForgetMe) : ProjectUpdateEvent(Id, nameof(ProjectForgetMeUpdateEvent));
 
-public record ProjectPrivacyUpdateEvent(string Id, bool IsPrivate) : ProjectUpdateEvent(Id, nameof(ProjectPrivacyUpdateEvent));
+public record ProjectPrivacyUpdateEvent(string Id, bool IsUnlisted) : ProjectUpdateEvent(Id, nameof(ProjectPrivacyUpdateEvent));
