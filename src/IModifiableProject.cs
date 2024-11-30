@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ipfs;
 using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
@@ -9,7 +8,7 @@ namespace WinAppCommunity.Sdk;
 /// <summary>
 /// Represents a project that can be modified.
 /// </summary>
-public interface IModifiableProject : IReadOnlyProject
+public interface IModifiableProject : IReadOnlyProject, IModifiableEntity
 {
     /// <summary>
     /// Updates the name of this publisher.
@@ -26,10 +25,6 @@ public interface IModifiableProject : IReadOnlyProject
     /// Updates the description of this publisher.
     /// </summary>
     public Task UpdateDescriptionAsync(string description, CancellationToken cancellationToken);
-
-    public Task UpdateIconAsync(IFile? iconFile, CancellationToken cancellationToken);
-
-    public Task UpdateHeroImageAsync(IFile? heroImageFile, CancellationToken cancellationToken);
 
     public Task AddFeatureAsync(string feature, CancellationToken cancellationToken);
 
@@ -51,9 +46,9 @@ public interface IModifiableProject : IReadOnlyProject
 
     public Task RemoveLinkAsync(Link link, CancellationToken cancellationToken);
 
-    public Task AddConnectionAsync(Cid value, CancellationToken cancellationToken);
+    public Task AddConnectionAsync(IReadOnlyConnection value, CancellationToken cancellationToken);
 
-    public Task RemoveConnectionAsync(Cid value, CancellationToken cancellationToken);
+    public Task RemoveConnectionAsync(IReadOnlyConnection value, CancellationToken cancellationToken);
 
     public Task UpdateAccentColorAsync(string? accentColor, CancellationToken cancellationToken);
 
@@ -61,5 +56,5 @@ public interface IModifiableProject : IReadOnlyProject
 
     public Task UpdateForgetMeStatusAsync(bool? forgetMe, CancellationToken cancellationToken);
 
-    public Task UpdatePrivateStateAsync(bool isPrivate, CancellationToken cancellationToken);
+    public Task UpdateUnlistedStateAsync(bool isUnlisted, CancellationToken cancellationToken);
 }

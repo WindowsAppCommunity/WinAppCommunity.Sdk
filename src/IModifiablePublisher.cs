@@ -8,7 +8,7 @@ namespace WinAppCommunity.Sdk;
 /// <summary>
 /// Represents a content publisher that can be modified.
 /// </summary>
-public interface IModifiablePublisher : IReadOnlyPublisher
+public interface IModifiablePublisher : IReadOnlyPublisher, IModifiableEntity
 {
     /// <summary>
     /// Updates the name of this publisher.
@@ -19,16 +19,6 @@ public interface IModifiablePublisher : IReadOnlyPublisher
     /// Updates the description for this publisher.
     /// </summary>
     public Task UpdateDescriptionAsync(string newDescription, CancellationToken cancellationToken);
-    
-    /// <summary>
-    /// Updates the owner of this publisher.
-    /// </summary>
-    public Task UpdateOwnerAsync(IReadOnlyUser user, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Updates the icon for this publisher.
-    /// </summary>
-    public Task UpdateIconAsync(IFile? newIconFile, CancellationToken cancellationToken);
 
     /// <summary>
     /// Updates the accent color for this publisher.
@@ -46,24 +36,14 @@ public interface IModifiablePublisher : IReadOnlyPublisher
     public Task RemoveLinkAsync(Link link, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Adds a project to this publisher.
+    /// Adds a user to this publisher along with their role.
     /// </summary>
-    public Task AddProjectAsync(IReadOnlyProject project, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Removes the project from this publisher.
-    /// </summary>
-    public Task RemoveProjectAsync(IReadOnlyProject project, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Adds a user to this publisher.
-    /// </summary>
-    public Task AddUserAsync(IReadOnlyUser user, CancellationToken cancellationToken);
+    public Task AddUserAsync(IReadOnlyUser user, Role role, CancellationToken cancellationToken);
 
     /// <summary>
     /// Removes the user from this publisher.
     /// </summary>
-    public Task RemoveUserAsync(IReadOnlyUser project, CancellationToken cancellationToken);
+    public Task RemoveUserAsync(IReadOnlyUser user, CancellationToken cancellationToken);
 
     /// <summary>
     /// Adds a child publisher to this publisher.
@@ -84,6 +64,16 @@ public interface IModifiablePublisher : IReadOnlyPublisher
     /// Removes a parent publisher from this publisher.
     /// </summary>
     public Task RemoveParentPublisherAsync(IReadOnlyPublisher parentPublisher, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Adds a connection to this publisher.
+    /// </summary>
+    public Task AddConnectionAsync(IReadOnlyConnection connection, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Removes a connection from this publisher.
+    /// </summary>
+    public Task RemoveConnectionAsync(IReadOnlyConnection connection, CancellationToken cancellationToken);
 
     /// <summary>
     /// Updates the private flag for this publisher.

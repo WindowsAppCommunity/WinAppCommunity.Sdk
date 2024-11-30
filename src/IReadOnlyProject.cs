@@ -12,18 +12,8 @@ namespace WinAppCommunity.Sdk;
 /// <summary>
 /// Represents a project.
 /// </summary>
-public interface IReadOnlyProject : IHasId
+public interface IReadOnlyProject : IReadOnlyEntity
 {
-    /// <summary>
-    /// The name of this project.
-    /// </summary>
-    public string Name { get; }
-
-    /// <summary>
-    /// A description of this project.
-    /// </summary>
-    public string Description { get; }
-
     /// <summary>
     /// A list of features provided by this project.
     /// </summary>
@@ -40,11 +30,6 @@ public interface IReadOnlyProject : IHasId
     public string Category { get; }
 
     /// <summary>
-    /// The time this project was created.
-    /// </summary>
-    public DateTime CreatedAt { get; }
-
-    /// <summary>
     /// Represents links to external profiles or resources added by the user.
     /// </summary>
     public Link[] Links { get; }
@@ -57,22 +42,12 @@ public interface IReadOnlyProject : IHasId
     /// <summary>
     /// A flag indicating whether this is a non-public project.
     /// </summary>
-    public bool IsPrivate { get; }
+    public bool IsUnlisted { get; }
 
     /// <summary>
     /// Holds information about project connections that have been published for consumption by an end user, such as a Microsoft Store app, a package on nuget.org, a git repo, etc.
     /// </summary>
-    public Dictionary<string, DagCid> Connections { get; }
-    
-    /// <summary>
-    /// Raised when <see cref="Name"/> is updated.
-    /// </summary>
-    public event EventHandler<string>? NameUpdated;
-    
-    /// <summary>
-    /// Raised when <see cref="Description"/> is updated.
-    /// </summary>
-    public event EventHandler<string>? DescriptionUpdated;
+    public Dictionary<string, IReadOnlyConnection> Connections { get; }
     
     /// <summary>
     /// Raised when <see cref="Features"/> is updated.
@@ -90,11 +65,6 @@ public interface IReadOnlyProject : IHasId
     public event EventHandler<string>? CategoryUpdated;
     
     /// <summary>
-    /// Raised when <see cref="CreatedAt"/> is updated.
-    /// </summary>
-    public event EventHandler<DateTime>? CreatedAtUpdated;
-    
-    /// <summary>
     /// Raised when <see cref="Links"/> is updated.
     /// </summary>
     public event EventHandler<Link[]>? LinksUpdated;
@@ -105,14 +75,14 @@ public interface IReadOnlyProject : IHasId
     public event EventHandler<bool?>? ForgetMeUpdated;
     
     /// <summary>
-    /// Raised when <see cref="IsPrivate"/> is updated.
+    /// Raised when <see cref="IsUnlisted"/> is updated.
     /// </summary>
-    public event EventHandler<bool>? IsPrivateUpdated;
+    public event EventHandler<bool>? IsUnlistedUpdated;
     
     /// <summary>
     /// Raised when <see cref="Connections"/> is updated.
     /// </summary>
-    public event EventHandler<KeyValuePair<string, DagCid>>? ConnectionsUpdated;
+    public event EventHandler<KeyValuePair<string, IReadOnlyConnection>>? ConnectionsUpdated;
 
     /// <summary>
     /// Gets the publisher for this project.
@@ -125,18 +95,6 @@ public interface IReadOnlyProject : IHasId
     /// </summary>
     /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
     public IAsyncEnumerable<IFile> GetImageFilesAsync(CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Gets the icon file for this user.
-    /// </summary>
-    /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
-    public Task<IFile?> GetIconFileAsync(CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Gets a file containing the hero image for this user.
-    /// </summary>
-    /// <param name="cancellationToken">A token that can be used to cancel the ongoing operation.</param>
-    public Task<IFile?> GetHeroImageFileAsync(CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets the collaborators for ths project.
