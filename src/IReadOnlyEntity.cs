@@ -3,7 +3,7 @@ namespace WinAppCommunity.Sdk;
 /// <summary>
 /// Represents a read-only entity with common properties and events.
 /// </summary>
-public interface IReadOnlyEntity
+public interface IReadOnlyEntity : IReadOnlyConnectionsCollection, IReadOnlyLinksCollection, IReadOnlyImagesCollection
 {
     /// <summary>
     /// The name of the entity.
@@ -11,19 +11,24 @@ public interface IReadOnlyEntity
     string Name { get; }
 
     /// <summary>
-    /// A description of the entity.
+    /// A description of the entity. Supports markdown.
     /// </summary>
     string Description { get; }
 
     /// <summary>
-    /// Represents links to external profiles or resources added by the entity.
+    /// An extended description of the entity. Supports markdown.
     /// </summary>
-    Link[] Links { get; }
+    string ExtendedDescription { get; }
 
     /// <summary>
     /// A flag that indicates whether the entity has requested to be forgotten.
     /// </summary>
     bool? ForgetMe { get; }
+
+    /// <summary>
+    /// A flag indicating whether this is a non-public project.
+    /// </summary>
+    public bool IsUnlisted { get; }
 
     /// <summary>
     /// Raised when <see cref="Name"/> is updated.
@@ -36,12 +41,17 @@ public interface IReadOnlyEntity
     event EventHandler<string>? DescriptionUpdated;
 
     /// <summary>
-    /// Raised when <see cref="Links"/> is updated.
+    /// Raised when <see cref="Description"/> is updated.
     /// </summary>
-    event EventHandler<Link[]>? LinksUpdated;
+    event EventHandler<string>? ExtendedDescriptionUpdated;
 
     /// <summary>
     /// Raised when <see cref="ForgetMe"/> is updated.
     /// </summary>
     event EventHandler<bool?>? ForgetMeUpdated;
+    
+    /// <summary>
+    /// Raised when <see cref="IsUnlisted"/> is updated.
+    /// </summary>
+    public event EventHandler<bool>? IsUnlistedUpdated;
 }
