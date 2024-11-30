@@ -36,11 +36,6 @@ public interface IModifiablePublisher : IReadOnlyPublisher
     public Task UpdateAccentColorAsync(string? newAccentColor, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Updates the contact email for this publisher.
-    /// </summary>
-    public Task UpdateContactEmailAsync(EmailConnection? newContactEmail, CancellationToken cancellationToken);
-
-    /// <summary>
     /// Adds a link to this publisher.
     /// </summary>
     public Task AddLinkAsync(Link link, CancellationToken cancellationToken);

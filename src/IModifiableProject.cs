@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Ipfs;
 using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
@@ -50,9 +51,9 @@ public interface IModifiableProject : IReadOnlyProject
 
     public Task RemoveLinkAsync(Link link, CancellationToken cancellationToken);
 
-    public Task AddPublishedConnectionAsync(ApplicationConnection connection, CancellationToken cancellationToken);
+    public Task AddConnectionAsync(Cid value, CancellationToken cancellationToken);
 
-    public Task RemovePublishedConnectionAsync(ApplicationConnection connection, CancellationToken cancellationToken);
+    public Task RemoveConnectionAsync(Cid value, CancellationToken cancellationToken);
 
     public Task UpdateAccentColorAsync(string? accentColor, CancellationToken cancellationToken);
 

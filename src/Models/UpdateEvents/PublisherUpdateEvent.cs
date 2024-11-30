@@ -1,7 +1,6 @@
 ﻿using Ipfs;
-using WinAppCommunity.Sdk.Models;
 
-namespace WinAppCommunity.Sdk.Nomad.UpdateEvents;
+namespace WinAppCommunity.Sdk.Models.UpdateEvents;
 
 public abstract record PublisherUpdateEvent(string Id, string EventId) : WinAppCommunityUpdateEvent(Id, EventId);
 
@@ -14,8 +13,6 @@ public record PublisherIconUpdateEvent(string Id, Cid? Icon) : PublisherUpdateEv
 public record PublisherOwnerUpdateEvent(string Id, Cid Owner) : PublisherUpdateEvent(Id, nameof(PublisherOwnerUpdateEvent));
 
 public record PublisherAccentColorUpdateEvent(string Id, string? AccentColor) : PublisherUpdateEvent(Id, nameof(PublisherAccentColorUpdateEvent));
-
-public record PublisherContactEmailUpdateEvent(string Id, EmailConnection? ContactEmail) : PublisherUpdateEvent(Id, nameof(PublisherContactEmailUpdateEvent));
 
 public record PublisherLinkAddEvent(string Id, Link Link) : PublisherUpdateEvent(Id, nameof(PublisherLinkAddEvent));
 

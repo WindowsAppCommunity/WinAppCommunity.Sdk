@@ -12,14 +12,13 @@ public record Publisher : IName
     /// Creates a new instance of <see cref="Publisher"/>.
     /// </summary>
     [JsonConstructor]
-    public Publisher(string name, string description, Cid owner, Cid? icon, string? accentColor, EmailConnection? contactEmail = null)
+    public Publisher(string name, string description, Cid owner, Cid? icon, string? accentColor)
     {
         Name = name;
         Description = description;
         Icon = icon;
         Owner = owner;
         AccentColor = accentColor;
-        ContactEmail = contactEmail;
     }
 
     /// <summary>
@@ -61,11 +60,6 @@ public record Publisher : IName
     public Link[] Links { get; set; } = [];
 
     /// <summary>
-    /// A <see cref="EmailConnection"/> that can be used to contact this publisher. 
-    /// </summary>
-    public EmailConnection? ContactEmail { get; set; }
-
-    /// <summary>
     /// A list of the projects registered with this publisher.
     /// </summary>
     public Cid[] Projects { get; set; } = [];
@@ -88,5 +82,5 @@ public record Publisher : IName
     /// <summary>
     /// A flag indicating whether this is a non-public project.
     /// </summary>
-    public bool IsPrivate { get; set; }
+    public bool IsUnlisted { get; set; }
 }

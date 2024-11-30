@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs;
 using OwlCore.ComponentModel;
 using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
@@ -61,7 +62,7 @@ public interface IReadOnlyProject : IHasId
     /// <summary>
     /// Holds information about project connections that have been published for consumption by an end user, such as a Microsoft Store app, a package on nuget.org, a git repo, etc.
     /// </summary>
-    public ApplicationConnection[] Connections { get; }
+    public Dictionary<string, DagCid> Connections { get; }
     
     /// <summary>
     /// Raised when <see cref="Name"/> is updated.
@@ -111,7 +112,7 @@ public interface IReadOnlyProject : IHasId
     /// <summary>
     /// Raised when <see cref="Connections"/> is updated.
     /// </summary>
-    public event EventHandler<ApplicationConnection[]>? ConnectionsUpdated;
+    public event EventHandler<KeyValuePair<string, DagCid>>? ConnectionsUpdated;
 
     /// <summary>
     /// Gets the publisher for this project.

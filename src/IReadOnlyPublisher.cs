@@ -34,11 +34,6 @@ public interface IReadOnlyPublisher : IHasId
     public Link[] Links { get; }
 
     /// <summary>
-    /// A <see cref="EmailConnection"/> that can be used to contact this publisher. 
-    /// </summary>
-    public EmailConnection? ContactEmail { get; }
-
-    /// <summary>
     /// A flag indicating whether this is a non-public project.
     /// </summary>
     public bool IsPrivate { get; }
@@ -62,11 +57,6 @@ public interface IReadOnlyPublisher : IHasId
     /// Raised when <see cref="Links"/> is updated.
     /// </summary>
     public event EventHandler<Link[]>? LinksUpdated;
-    
-    /// <summary>
-    /// Raised when <see cref="ContactEmail"/> is updated.
-    /// </summary>
-    public event EventHandler<EmailConnection?>? ContactEmailUpdated;
     
     /// <summary>
     /// Raised when <see cref="IsPrivate"/> is updated.

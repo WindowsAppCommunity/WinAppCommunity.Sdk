@@ -5,10 +5,9 @@ using Ipfs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OwlCore.Extensions;
-using WinAppCommunity.Sdk.Models;
-using WinAppCommunity.Sdk.Nomad.UpdateEvents;
+using WinAppCommunity.Sdk.Models.UpdateEvents;
 
-namespace WinAppCommunity.Sdk.Nomad.Serialization;
+namespace WinAppCommunity.Sdk.Models.JsonConverters;
 
 internal static partial class UpdateEventSerializationHelpers
 {
@@ -51,7 +50,7 @@ internal static partial class UpdateEventSerializationHelpers
         return null;
     }
 
-    internal static UserUpdateEvent? ReadUser(JObject jObject, string eventId, string id, JsonSerializer serializer)
+    internal static WinAppCommunityUpdateEvent? ReadUser(JObject jObject, string eventId, string id, JsonSerializer serializer)
     {
         return eventId switch
         {
@@ -67,11 +66,11 @@ internal static partial class UpdateEventSerializationHelpers
             nameof(UserForgetMeUpdateEvent) when jObject["ForgetMe"] is { } forgetMeToken =>
                 new UserForgetMeUpdateEvent(id, forgetMeToken.Value<bool?>()),
 
-            nameof(UserConnectionAddEvent) when jObject["Connection"] is { } connectionToken && connectionToken.ToObject<ApplicationConnection>(serializer) is { } value =>
-                new UserConnectionAddEvent(id, value),
+            nameof(ConnectionAddEvent) when jObject["Connection"] is { } connectionToken && connectionToken.ToObject<DagCid>(serializer) is { } value =>
+                new ConnectionAddEvent(id, value),
 
-            nameof(UserConnectionRemoveEvent) when jObject["Connection"] is { } connectionToken && connectionToken.ToObject<ApplicationConnection>(serializer) is { } value =>
-                new UserConnectionRemoveEvent(id, value),
+            nameof(ConnectionRemoveEvent) when jObject["Connection"] is { } connectionToken && connectionToken.ToObject<DagCid>(serializer) is { } value =>
+                new ConnectionRemoveEvent(id, value),
 
             nameof(UserLinkAddEvent) when jObject["Link"] is { } linkAddToken && linkAddToken.ToObject<Link>(serializer) is { } value =>
                 new UserLinkAddEvent(id, value),
@@ -95,7 +94,7 @@ internal static partial class UpdateEventSerializationHelpers
         };
     }
 
-    internal static ProjectUpdateEvent? ReadProject(JObject jObject, string eventId, string id, JsonSerializer serializer)
+    internal static WinAppCommunityUpdateEvent? ReadProject(JObject jObject, string eventId, string id, JsonSerializer serializer)
     {
         return eventId switch
         {
@@ -104,9 +103,6 @@ internal static partial class UpdateEventSerializationHelpers
 
             nameof(ProjectDescriptionUpdateEvent) when jObject["Description"] is { } descriptionToken && descriptionToken.Value<string>() is { } value =>
                 new ProjectDescriptionUpdateEvent(id, value),
-
-            nameof(ProjectPublisherUpdateEvent) when jObject["Publisher"] is { } publisherToken && publisherToken.ToObject<Cid>(serializer) is { } value =>
-                new ProjectPublisherUpdateEvent(id, value),
 
             nameof(ProjectIconUpdateEvent) when jObject["Icon"] is { } iconToken =>
                 new ProjectIconUpdateEvent(id, iconToken.ToObject<Cid?>(serializer)),
@@ -138,11 +134,11 @@ internal static partial class UpdateEventSerializationHelpers
             nameof(ProjectLinkRemoveEvent) when jObject["Link"] is { } linkRemoveToken && linkRemoveToken.ToObject<Link>(serializer) is { } value =>
                 new ProjectLinkRemoveEvent(id, value),
 
-            nameof(ProjectPublishedConnectionAddEvent) when jObject["Connection"] is { } connectionAddToken && connectionAddToken.ToObject<ApplicationConnection>(serializer) is { } value =>
-                new ProjectPublishedConnectionAddEvent(id, value),
+            nameof(ConnectionAddEvent) when jObject["Connection"] is { } connectionToken && connectionToken.ToObject<DagCid>(serializer) is { } value =>
+                new ConnectionAddEvent(id, value),
 
-            nameof(ProjectPublishedConnectionRemoveEvent) when jObject["Connection"] is { } connectionRemoveToken && connectionRemoveToken.ToObject<ApplicationConnection>(serializer) is { } value =>
-                new ProjectPublishedConnectionRemoveEvent(id, value),
+            nameof(ConnectionRemoveEvent) when jObject["Connection"] is { } connectionToken && connectionToken.ToObject<DagCid>(serializer) is { } value =>
+                new ConnectionRemoveEvent(id, value),
 
             nameof(ProjectForgetMeUpdateEvent) when jObject["ForgetMe"] is { } forgetMeToken =>
                 new ProjectForgetMeUpdateEvent(id, forgetMeToken.Value<bool?>()),

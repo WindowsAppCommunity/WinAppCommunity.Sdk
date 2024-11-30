@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Ipfs;
 using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
@@ -18,9 +19,9 @@ public interface IModifiableUser : IReadOnlyUser
 
     public Task UpdateForgetMeAsync(bool forget, CancellationToken cancellationToken);
 
-    public Task AddConnectionAsync(ApplicationConnection newConnection, CancellationToken cancellationToken);
+    public Task AddConnectionAsync(Cid value, CancellationToken cancellationToken);
 
-    public Task RemoveConnectionAsync(ApplicationConnection connectionToRemove, CancellationToken cancellationToken);
+    public Task RemoveConnectionAsync(Cid value, CancellationToken cancellationToken);
 
     public Task AddLinkAsync(Link newLink, CancellationToken cancellationToken);
 

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using WinAppCommunity.Sdk.Nomad.UpdateEvents;
+using WinAppCommunity.Sdk.Models.UpdateEvents;
 
-namespace WinAppCommunity.Sdk.Nomad.Serialization;
+namespace WinAppCommunity.Sdk.Models.JsonConverters;
 
 /// <summary>
 /// A custom json convert for discriminating the various types of <see cref="WinAppCommunityUpdateEvent"/>.

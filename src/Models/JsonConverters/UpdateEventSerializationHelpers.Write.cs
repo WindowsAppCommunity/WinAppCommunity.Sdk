@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
-using WinAppCommunity.Sdk.Nomad.UpdateEvents;
+using WinAppCommunity.Sdk.Models.UpdateEvents;
 
-namespace WinAppCommunity.Sdk.Nomad.Serialization;
+namespace WinAppCommunity.Sdk.Models.JsonConverters;
 
 internal static partial class UpdateEventSerializationHelpers
 {
@@ -38,11 +38,11 @@ internal static partial class UpdateEventSerializationHelpers
                 jObject.Add("ForgetMe",
                     forgetMeUpdateEvent.ForgetMe == null ? null : new JValue(forgetMeUpdateEvent.ForgetMe.Value));
                 break;
-            case UserConnectionAddEvent connectionAddEvent:
-                jObject.Add("Connection", JObject.FromObject(connectionAddEvent.Connection));
+            case ConnectionAddEvent connectionAddEvent:
+                jObject.Add("Connection", JObject.FromObject(connectionAddEvent.Value));
                 break;
-            case UserConnectionRemoveEvent connectionRemoveEvent:
-                jObject.Add("Connection", JObject.FromObject(connectionRemoveEvent.Connection));
+            case ConnectionRemoveEvent connectionRemoveEvent:
+                jObject.Add("Connection", JObject.FromObject(connectionRemoveEvent.Value));
                 break;
             case UserLinkAddEvent linkAddEvent:
                 jObject.Add("Link", JObject.FromObject(linkAddEvent.Link));
@@ -74,9 +74,6 @@ internal static partial class UpdateEventSerializationHelpers
                 break;
             case ProjectDescriptionUpdateEvent projectDescriptionUpdateEvent:
                 jObject.Add("Description", new JValue(projectDescriptionUpdateEvent.Description));
-                break;
-            case ProjectPublisherUpdateEvent projectPublisherUpdateEvent:
-                jObject.Add("Publisher", new JValue(projectPublisherUpdateEvent.Publisher));
                 break;
             case ProjectIconUpdateEvent projectIconUpdateEvent:
                 jObject.Add("Icon",
@@ -129,11 +126,11 @@ internal static partial class UpdateEventSerializationHelpers
             case ProjectLinkRemoveEvent projectLinkRemoveEvent:
                 jObject.Add("Link", JObject.FromObject(projectLinkRemoveEvent.Link));
                 break;
-            case ProjectPublishedConnectionAddEvent projectConnectionAddEvent:
-                jObject.Add("Connection", JObject.FromObject(projectConnectionAddEvent.Connection));
+            case ConnectionAddEvent connectionAddEvent:
+                jObject.Add("Connection", JObject.FromObject(connectionAddEvent.Value));
                 break;
-            case ProjectPublishedConnectionRemoveEvent projectConnectionRemoveEvent:
-                jObject.Add("Connection", JObject.FromObject(projectConnectionRemoveEvent.Connection));
+            case ConnectionRemoveEvent connectionRemoveEvent:
+                jObject.Add("Connection", JObject.FromObject(connectionRemoveEvent.Value));
                 break;
             case ProjectForgetMeUpdateEvent projectForgetMeUpdateEvent:
                 jObject.Add("ForgetMe",

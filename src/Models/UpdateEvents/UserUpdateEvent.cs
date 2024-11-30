@@ -1,7 +1,6 @@
 ﻿using Ipfs;
-using WinAppCommunity.Sdk.Models;
 
-namespace WinAppCommunity.Sdk.Nomad.UpdateEvents;
+namespace WinAppCommunity.Sdk.Models.UpdateEvents;
 
 public abstract record UserUpdateEvent(string Id, string EventId) : WinAppCommunityUpdateEvent(Id, EventId);
 
@@ -12,10 +11,6 @@ public record UserMarkdownAboutMeUpdateEvent(string Id, string MarkdownAboutMe) 
 public record UserIconUpdateEvent(string Id, Cid? Icon) : UserUpdateEvent(Id, nameof(UserIconUpdateEvent));
 
 public record UserForgetMeUpdateEvent(string Id, bool? ForgetMe) : UserUpdateEvent(Id, nameof(UserForgetMeUpdateEvent));
-
-public record UserConnectionAddEvent(string Id, ApplicationConnection Connection) : UserUpdateEvent(Id, nameof(UserConnectionAddEvent));
-
-public record UserConnectionRemoveEvent(string Id, ApplicationConnection Connection) : UserUpdateEvent(Id, nameof(UserConnectionRemoveEvent));
 
 public record UserLinkAddEvent(string Id, Link Link) : UserUpdateEvent(Id, nameof(UserLinkAddEvent));
 

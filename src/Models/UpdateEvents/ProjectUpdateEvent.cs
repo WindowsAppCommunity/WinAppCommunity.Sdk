@@ -1,15 +1,12 @@
 ﻿using Ipfs;
-using WinAppCommunity.Sdk.Models;
 
-namespace WinAppCommunity.Sdk.Nomad.UpdateEvents;
+namespace WinAppCommunity.Sdk.Models.UpdateEvents;
 
 public abstract record ProjectUpdateEvent(string Id, string EventId) : WinAppCommunityUpdateEvent(Id, EventId);
 
 public record ProjectNameUpdateEvent(string Id, string Name) : ProjectUpdateEvent(Id, nameof(ProjectNameUpdateEvent));
 
 public record ProjectDescriptionUpdateEvent(string Id, string Description) : ProjectUpdateEvent(Id, nameof(ProjectDescriptionUpdateEvent));
-
-public record ProjectPublisherUpdateEvent(string Id, Cid Publisher) : ProjectUpdateEvent(Id, nameof(ProjectPublisherUpdateEvent));
 
 public record ProjectIconUpdateEvent(string Id, Cid? Icon) : ProjectUpdateEvent(Id, nameof(ProjectIconUpdateEvent));
 
@@ -38,10 +35,6 @@ public record ProjectCollaboratorRemoveEvent(string Id, Collaborator Collaborato
 public record ProjectLinkAddEvent(string Id, Link Link) : ProjectUpdateEvent(Id, nameof(ProjectLinkAddEvent));
 
 public record ProjectLinkRemoveEvent(string Id, Link Link) : ProjectUpdateEvent(Id, nameof(ProjectLinkRemoveEvent));
-
-public record ProjectPublishedConnectionAddEvent(string Id, ApplicationConnection Connection) : ProjectUpdateEvent(Id, nameof(ProjectPublishedConnectionAddEvent));
-
-public record ProjectPublishedConnectionRemoveEvent(string Id, ApplicationConnection Connection) : ProjectUpdateEvent(Id, nameof(ProjectPublishedConnectionRemoveEvent));
 
 public record ProjectForgetMeUpdateEvent(string Id, bool? ForgetMe) : ProjectUpdateEvent(Id, nameof(ProjectForgetMeUpdateEvent));
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs;
 using OwlCore.Storage;
 using WinAppCommunity.Sdk.Models;
 
@@ -27,7 +28,7 @@ public interface IReadOnlyUser
     /// <summary>
     /// Represents application connections added by the user.
     /// </summary>
-    public ApplicationConnection[] Connections { get; }
+    public Dictionary<string, DagCid> Connections { get; }
 
     /// <summary>
     /// Represents links to external profiles or resources added by the user.
@@ -52,7 +53,7 @@ public interface IReadOnlyUser
     /// <summary>
     /// Raised when <see cref="Connections"/> is updated.
     /// </summary>
-    public event EventHandler<ApplicationConnection[]>? ConnectionsUpdated;
+    public event EventHandler<KeyValuePair<string, DagCid>>? ConnectionsUpdated;
     
     /// <summary>
     /// Raised when <see cref="Links"/> is updated.
