@@ -13,7 +13,7 @@ public interface IReadOnlyUserCollection : IReadOnlyUserCollection<IReadOnlyUser
 /// Represents a collection of users with a corresponding role that can be modified.
 /// </summary>
 /// <typeparam name="TUser">The type of user in this collection.</typeparam>
-public interface IReadOnlyUserCollection<TUser>
+public interface IReadOnlyUserCollection<out TUser>
     where TUser : IReadOnlyUser
 {
     /// <summary>

@@ -10,7 +10,7 @@ public interface IReadOnlyProject : IReadOnlyProject<IReadOnlyProjectCollection>
 /// <summary>
 /// Represents a project.
 /// </summary>
-public interface IReadOnlyProject<TDependencyCollection> : IReadOnlyEntity, IReadOnlyImagesCollection, IReadOnlyUserRoleCollection, IReadOnlyAccentColor
+public interface IReadOnlyProject<out TDependencyCollection> : IReadOnlyEntity, IReadOnlyImagesCollection, IReadOnlyUserRoleCollection, IReadOnlyAccentColor, IReadOnlyFeaturesCollection
     where TDependencyCollection : IReadOnlyProjectCollection
 {
     /// <summary>
