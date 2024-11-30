@@ -38,7 +38,7 @@ public record Collaborator : IEqualityComparer<Collaborator>
     }
 
     /// <inheritdoc />
-    public bool Equals(Collaborator x, Collaborator y)
+    public bool Equals(Collaborator? x, Collaborator? y)
     {
         if (ReferenceEquals(x, y)) return true;
         if (ReferenceEquals(x, null)) return false;
