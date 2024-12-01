@@ -33,4 +33,4 @@ Version numbering follows the Semantic versioning approach.
 
 ## License
 
-This code is licensed under the MIT License. See the [LICENSE](./src/LICENSE.txt) file for more details.
+This code is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for more details.
