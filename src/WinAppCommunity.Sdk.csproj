@@ -28,6 +28,7 @@ Initial release of WinAppCommunity.Sdk.
 		<DebugType>embedded</DebugType>
 		<NeutralLanguage>en</NeutralLanguage>
 		<Authors>Arlo Godfrey</Authors>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -47,6 +48,10 @@ Initial release of WinAppCommunity.Sdk.
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="LICENSE.txt">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
