@@ -1,6 +1,7 @@
 # WinAppCommunity.Sdk [![Version](https://img.shields.io/nuget/v/WinAppCommunity.Sdk.svg)](https://www.nuget.org/packages/WinAppCommunity.Sdk)
 
-Manage your membership, projects and publisher data in the Windows App Community.
+Manage your user, projects and publisher membership in the Windows App Community. Fully peer-to-peer.
+![Banner2](https://github.com/user-attachments/assets/9fbe1f09-cf9d-406f-8df5-58d069ef7a00)
 
 This is a Work In Progress and is not yet ready for use. Please check back later.
 
