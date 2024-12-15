@@ -2,7 +2,7 @@
 > This is a **work in progress** and is not yet ready for use. Please check back later.
 
 <p align="center">
-  <img alt="UWP Joke" src="https://github.com/user-attachments/assets/aafaded8-11e8-45b8-8405-16077666be01" />
+  <img alt="Hero Image" src="https://github.com/user-attachments/assets/ac6d3215-1633-4f09-af31-4203176e904d" />
 </p>
 
 <p align="center">
