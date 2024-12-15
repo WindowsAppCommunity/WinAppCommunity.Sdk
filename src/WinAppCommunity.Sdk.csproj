@@ -17,7 +17,6 @@
 		<Version>0.0.0</Version>
 		<Product>WinAppCommunity</Product>
 		<Description></Description>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/UWPCommunity/WinAppCommunity.Sdk</PackageProjectUrl>
 		<PackageReleaseNotes>
@@ -29,6 +28,7 @@ Initial release of WinAppCommunity.Sdk.
 		<NeutralLanguage>en</NeutralLanguage>
 		<Authors>Arlo Godfrey</Authors>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
